@@ -242,7 +242,7 @@ export const Pip = () => {
     height: SCREEN_HEIGHT,
   };
 
-  const margin = viewMode == ViewMode.Expand ? 30 : settings.margin;
+  const margin = viewMode === ViewMode.Expand ? 30 : settings.margin;
 
   bounds.x += margin;
   bounds.y += margin;
@@ -316,7 +316,7 @@ export const Pip = () => {
 export const PipOuter = () => {
   const [{ viewMode }] = useGlobalState();
 
-  if (viewMode == ViewMode.Closed) {
+  if (viewMode === ViewMode.Closed) {
     return null;
   }
 
