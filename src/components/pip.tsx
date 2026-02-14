@@ -1,5 +1,4 @@
 import { Router, WindowRouter, getGamepadNavigationTrees } from '@decky/ui';
-import isEqual from 'lodash/isEqual';
 import { useEffect, useState } from 'react';
 
 import { useGlobalState } from '../hooks/global-state';
@@ -103,6 +102,37 @@ const getDeckComponentBounds = () => {
   };
 };
 
+const areRectanglesEqual = (
+  first: { x: number; y: number; width: number; height: number } | null,
+  second: { x: number; y: number; width: number; height: number } | null,
+) => {
+  if (!first && !second) {
+    return true;
+  }
+
+  if (!first || !second) {
+    return false;
+  }
+
+  return (
+    first.x === second.x &&
+    first.y === second.y &&
+    first.width === second.width &&
+    first.height === second.height
+  );
+};
+
+const areDeckComponentBoundsEqual = (
+  first: ReturnType<typeof getDeckComponentBounds>,
+  second: ReturnType<typeof getDeckComponentBounds>,
+) => {
+  return (
+    areRectanglesEqual(first.nav, second.nav) &&
+    areRectanglesEqual(first.qam, second.qam) &&
+    areRectanglesEqual(first.virtualKeyboard, second.virtualKeyboard)
+  );
+};
+
 const useDeckComponentBounds = () => {
   const [state, setState] = useState(getDeckComponentBounds());
 
@@ -110,7 +140,7 @@ const useDeckComponentBounds = () => {
     const interval = setInterval(() => {
       setState((current) => {
         const next = getDeckComponentBounds();
-        return isEqual(next, current) ? current : next;
+        return areDeckComponentBoundsEqual(next, current) ? current : next;
       });
     }, 250);
 

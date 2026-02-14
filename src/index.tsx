@@ -1,4 +1,3 @@
-import merge from 'lodash/merge';
 import { FaTv } from 'react-icons/fa';
 import { StateManager } from 'cotton-box';
 import { quickAccessMenuClasses } from '@decky/ui';
@@ -11,19 +10,20 @@ import { State, GlobalContext } from './hooks/global-state';
 import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './lib/storage';
 
 export default definePlugin(() => {
+  const defaultState: State = {
+    viewMode: ViewMode.Closed,
+    visible: true,
+    position: Position.TopRight,
+    margin: 30,
+    size: 1,
+    url: 'https://netflix.com',
+  };
+
   const state = new StateManager<State>(
-    merge<Partial<State>, State, Partial<State>>(
-      {},
-      {
-        viewMode: ViewMode.Closed,
-        visible: true,
-        position: Position.TopRight,
-        margin: 30,
-        size: 1,
-        url: 'https://netflix.com',
-      },
-      getPersistedPortalState(localStorage),
-    ),
+    {
+      ...defaultState,
+      ...getPersistedPortalState(localStorage),
+    },
   );
 
   state.watch(({ position, margin, size, url }) =>

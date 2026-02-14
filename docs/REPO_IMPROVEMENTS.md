@@ -215,14 +215,16 @@ Review current dependencies for relevance, maintenance status, and bundle size.
 
 ### Deliverables
 
-- [ ] **`lodash`** — Only `merge` and `isEqual` are used. Consider replacing with smaller alternatives or native equivalents to reduce bundle size:
+- [x] **`lodash`** — Only `merge` and `isEqual` are used. Consider replacing with smaller alternatives or native equivalents to reduce bundle size:
   - `isEqual` → `JSON.stringify` comparison (already shallow) or a lightweight deep-equal utility.
   - `merge` → spread operator or `structuredClone` (if deep clone is truly needed).
-- [ ] **`@types/lodash`** — Remove if Lodash is removed.
-- [ ] **`@types/webpack`** — Not referenced anywhere in the codebase. Likely a leftover. Remove.
-- [ ] **`cotton-box` / `cotton-box-react`** — Evaluate whether this state management library is still the best fit as features grow, or whether a simpler React Context + `useReducer` pattern would suffice.
-- [ ] Run `pnpm audit` and resolve any reported vulnerabilities.
-- [ ] Run `pnpm outdated` and update non-breaking dependencies.
+- [x] **`@types/lodash`** — Remove if Lodash is removed.
+- [x] **`@types/webpack`** — Not referenced anywhere in the codebase. Likely a leftover. Remove.
+- [x] **`cotton-box` / `cotton-box-react`** — Evaluate whether this state management library is still the best fit as features grow, or whether a simpler React Context + `useReducer` pattern would suffice.
+- [x] Run `pnpm audit` and resolve any reported vulnerabilities.
+- [x] Run `pnpm outdated` and update non-breaking dependencies.
+
+**Step 11 outcome:** `lodash` and `@types/lodash` were removed after replacing `merge` and `isEqual` with native/local logic. `@types/webpack` was already removed. `pnpm audit` reports no known vulnerabilities. `pnpm outdated` reports only major-version upgrades (or intentionally pinned React type majors), so no non-breaking dependency updates were available to apply. `cotton-box` / `cotton-box-react` remain in place for now because current state usage is simple and stable; reevaluate during larger state-management refactors.
 
 ---
 
