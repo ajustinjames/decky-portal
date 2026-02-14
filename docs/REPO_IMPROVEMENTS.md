@@ -91,18 +91,18 @@ There are currently **zero tests** in the repo — no test runner, no test files
 
 ### Deliverables
 
-- [ ] Install Vitest and supporting packages (see [TESTING.md](TESTING.md) for the full dependency list).
-- [ ] Create a `vitest.config.ts` at the project root.
-- [ ] Add a `test` script: `"test": "vitest run"`.
-- [ ] Add a `test:watch` script: `"test:watch": "vitest"`.
-- [ ] Add a `test:coverage` script: `"test:coverage": "vitest run --coverage"`.
-- [ ] Create a `src/__tests__/` directory for unit tests.
-- [ ] Create a `src/__mocks__/` directory for shared mocks (Decky API, Steam browser, `localStorage`).
-- [ ] Write baseline tests for the existing pure-logic modules before any refactoring:
-  - [ ] `geometry.tsx` — `intersectRectangles` (pure function, easiest starting point).
-  - [ ] `util.tsx` — enum validity, constant values.
-  - [ ] `globalState.tsx` — state initialisation and `useGlobalState` behaviour.
-- [ ] Ensure coverage report output is added to `.gitignore`.
+- [x] Install Vitest and supporting packages (see [TESTING.md](TESTING.md) for the full dependency list).
+- [x] Create a `vitest.config.ts` at the project root.
+- [x] Add a `test` script: `"test": "vitest run"`.
+- [x] Add a `test:watch` script: `"test:watch": "vitest"`.
+- [x] Add a `test:coverage` script: `"test:coverage": "vitest run --coverage"`.
+- [x] Create a `src/__tests__/` directory for unit tests.
+- [x] Create a `src/__mocks__/` directory for shared mocks (Decky API, Steam browser, `localStorage`).
+- [x] Write baseline tests for the existing pure-logic modules before any refactoring:
+  - [x] `geometry.tsx` — `intersectRectangles` (pure function, easiest starting point).
+  - [x] `util.tsx` — enum validity, constant values.
+  - [x] `globalState.tsx` — state initialisation and `useGlobalState` behaviour.
+- [x] Ensure coverage report output is added to `.gitignore`.
 
 ---
 
