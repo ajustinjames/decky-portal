@@ -1,6 +1,11 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@decky/api': '/Users/ajames/workspace/decky-portal/src/__mocks__/decky-api.ts',
+    },
+  },
   test: {
     environment: 'happy-dom',
     globals: true,
