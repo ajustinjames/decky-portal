@@ -83,7 +83,7 @@ describe('Pip and PipOuter', () => {
   it('throws when decky main window instance is unavailable', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {});
     const original = Router.WindowStore.GamepadUIMainWindowInstance;
     Router.WindowStore.GamepadUIMainWindowInstance = undefined as never;
 

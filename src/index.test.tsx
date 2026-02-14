@@ -48,7 +48,7 @@ describe('plugin entrypoint', () => {
     const { routerHook } = await import('@decky/api');
     const { PORTAL_STORAGE_KEY } = await import('./lib/storage');
 
-    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+    const setItemSpy = vi.spyOn(globalThis.Storage.prototype, 'setItem');
 
     const globalComponentFactory = vi.mocked(routerHook.addGlobalComponent).mock.calls[0][1] as
       | (() => React.ReactElement)
