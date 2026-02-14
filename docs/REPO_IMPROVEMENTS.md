@@ -112,8 +112,8 @@ There is **no CI pipeline**. PRs can be merged with broken builds, lint failures
 
 ### Deliverables
 
-- [ ] Create `.github/workflows/ci.yml` with a pipeline that runs on `push` and `pull_request` to `main`.
-- [ ] Pipeline steps:
+- [x] Create `.github/workflows/ci.yml` with a pipeline that runs on `push` and `pull_request` to `main`.
+- [x] Pipeline steps:
   1. Checkout code.
   2. Set up Node (match version in an `.nvmrc` or `package.json` `engines` field).
   3. Install dependencies via `pnpm install --frozen-lockfile`.
@@ -121,9 +121,9 @@ There is **no CI pipeline**. PRs can be merged with broken builds, lint failures
   5. Run `pnpm format:check`.
   6. Run `pnpm test:coverage`.
   7. Run `pnpm build`.
-- [ ] Add an `.nvmrc` file specifying the Node.js version the project targets.
-- [ ] Add an `engines` field to `package.json` to document the minimum Node and pnpm versions.
-- [ ] Consider adding a branch protection rule that requires the CI check to pass before merge.
+- [x] Add an `.nvmrc` file specifying the Node.js version the project targets.
+- [x] Add an `engines` field to `package.json` to document the minimum Node and pnpm versions.
+- [x] Consider adding a branch protection rule that requires the CI check to pass before merge. (Manual GitHub repository setting.)
 
 ---
 

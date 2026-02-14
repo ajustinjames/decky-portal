@@ -1,4 +1,5 @@
 import React from 'react';
+import { beforeEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
 if (!globalThis.window) {
