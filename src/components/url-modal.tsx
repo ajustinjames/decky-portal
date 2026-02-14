@@ -19,7 +19,7 @@ export const UrlModal = (props: ModalRootProps) => {
         ...state,
         visible: true,
       }));
-  }, []);
+  }, [setGlobalState]);
 
   return (
     <ConfirmModal

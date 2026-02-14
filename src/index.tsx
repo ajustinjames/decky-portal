@@ -19,12 +19,10 @@ export default definePlugin(() => {
     url: 'https://netflix.com',
   };
 
-  const state = new StateManager<State>(
-    {
-      ...defaultState,
-      ...getPersistedPortalState(localStorage),
-    },
-  );
+  const state = new StateManager<State>({
+    ...defaultState,
+    ...getPersistedPortalState(localStorage),
+  });
 
   state.watch(({ position, margin, size, url }) =>
     localStorage.setItem(PORTAL_STORAGE_KEY, JSON.stringify({ position, margin, size, url })),

@@ -22,15 +22,57 @@ interface BrowserProps {
   height: number;
 }
 
+interface BrowserHandle {
+  SetVisible(visible: boolean): void;
+  SetBounds(x: number, y: number, width: number, height: number): void;
+}
+
+interface BrowserViewHandle {
+  GetBrowser(): BrowserHandle;
+  LoadURL(url: string): void;
+  Destroy(): void;
+}
+
+interface MainWindowInstance {
+  CreateBrowserView(name: string): BrowserViewHandle;
+}
+
+interface NavTree {
+  id?: string;
+  m_Root?: {
+    m_element?: {
+      ownerDocument?: {
+        defaultView?: DeckWindow | null;
+      };
+    };
+  };
+}
+
+interface DeckWindow {
+  document: {
+    hidden: boolean;
+  };
+  screenLeft?: number;
+  screenTop?: number;
+  outerWidth?: number;
+  outerHeight?: number;
+}
+
 const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
   useUIComposition(UIComposition.Notification);
 
-  const [{ browser, view }] = useState<{ browser: any; view: any }>(() => {
-    const root: WindowRouter & any = Router.WindowStore?.GamepadUIMainWindowInstance;
+  const [{ browser, view }] = useState<{ browser: BrowserHandle; view: BrowserViewHandle }>(() => {
+    const root = Router.WindowStore?.GamepadUIMainWindowInstance as
+      | (WindowRouter & MainWindowInstance)
+      | undefined;
+    if (!root) {
+      throw new Error('Unable to access Decky main window instance');
+    }
+
     const view = root.CreateBrowserView('pip');
     const browser = view.GetBrowser();
 
-    window['pip' as any] = view;
+    (window as unknown as { pip?: BrowserViewHandle }).pip = view;
 
     return {
       view,
@@ -40,50 +82,50 @@ const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
 
   useEffect(() => {
     browser.SetVisible(visible);
-  }, [visible]);
+  }, [browser, visible]);
 
   useEffect(() => {
     view.LoadURL(url);
-  }, [url]);
+  }, [url, view]);
 
   useEffect(() => {
     browser.SetBounds(x, y, width, height);
-  }, [x, y, width, height]);
+  }, [browser, x, y, width, height]);
 
   useEffect(() => {
     return () => view.Destroy();
-  }, []);
+  }, [view]);
 
   return null;
 };
 
-const getBounds = (document: any) => {
+const getBounds = (windowView?: DeckWindow | null) => {
   return {
-    x: document?.defaultView?.screenLeft,
-    y: document?.defaultView?.screenTop,
-    width: document?.defaultView?.outerWidth,
-    height: document?.defaultView?.outerHeight,
+    x: windowView?.screenLeft ?? 0,
+    y: windowView?.screenTop ?? 0,
+    width: windowView?.outerWidth ?? 0,
+    height: windowView?.outerHeight ?? 0,
   };
 };
 
+const getOwnerWindow = (trees: NavTree[], id: string) => {
+  return (
+    trees.find((tree) => tree.id === id)?.m_Root?.m_element?.ownerDocument?.defaultView ?? null
+  );
+};
+
 const getDeckComponentBounds = () => {
-  const trees = getGamepadNavigationTrees();
+  const trees = getGamepadNavigationTrees() as NavTree[];
 
-  const nav =
-    trees.find((tree: any) => tree?.id === 'MainNavMenuContainer')?.m_Root?.m_element?.ownerDocument
-      .defaultView ?? null;
-  const navHidden = nav?.document.hidden;
-  const navBounds = navHidden ? null : getBounds(nav?.document);
+  const nav = getOwnerWindow(trees, 'MainNavMenuContainer');
+  const navHidden = nav?.document.hidden ?? true;
+  const navBounds = navHidden ? null : getBounds(nav);
 
-  const qam =
-    trees.find((tree: any) => tree?.id === 'QuickAccess-NA')?.m_Root?.m_element?.ownerDocument
-      .defaultView ?? null;
-  const qamHidden = qam?.document.hidden;
-  const qamBounds = qamHidden ? null : getBounds(qam?.document);
+  const qam = getOwnerWindow(trees, 'QuickAccess-NA');
+  const qamHidden = qam?.document.hidden ?? true;
+  const qamBounds = qamHidden ? null : getBounds(qam);
 
-  const virtualKeyboard =
-    trees.find((tree: any) => tree?.id === 'virtual keyboard')?.m_Root?.m_element?.ownerDocument
-      .defaultView ?? null;
+  const virtualKeyboard = getOwnerWindow(trees, 'virtual keyboard');
   const virtualKeyboardHidden = !virtualKeyboard;
   // this is a guess, gotta figure out how to inspect to keyboard DOM
   const virtualKeyboardBounds = virtualKeyboardHidden

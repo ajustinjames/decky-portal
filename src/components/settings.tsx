@@ -24,7 +24,7 @@ export const Settings = () => {
       visible: true,
       viewMode: state.viewMode == ViewMode.Closed ? ViewMode.Picture : state.viewMode,
     }));
-  }, []);
+  }, [setGlobalState]);
 
   const positionOptions = [
     { label: 'Top Left', data: Position.TopLeft },

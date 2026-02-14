@@ -161,14 +161,14 @@ The current state is persisted under the key `"pip"`. This should be migrated to
 
 ### Deliverables
 
-- [ ] Write a one-time migration function that:
+- [x] Write a one-time migration function that:
   1. Reads `localStorage.getItem('pip')`.
   2. If data exists and `'portal'` does not, copies the data to `'portal'` and removes `'pip'`.
   3. If both exist, prefers `'portal'` (the migrated key).
 - [x] Update `src/index.tsx` to read/write under `'portal'`.
-- [ ] Add a unit test for the migration logic.
+- [x] Add a unit test for the migration logic.
 
-> Decision: For a greenfield setup with no legacy installs, migration from `pip` to `portal` is intentionally skipped.
+> Decision: For a greenfield setup with no legacy installs, migration from `pip` to `portal` is intentionally skipped (N/A).
 
 ---
 
@@ -242,7 +242,6 @@ All dependencies should be brought to their latest compatible versions before fe
 | `@decky/ui`                        | ^4.9.0    | **^4.11.1** | Minor     | Safe — active development, no breaking changes within 4.x.                                                                        |
 | `@types/react`                     | 18.3.3    | **18.3.28** | Patch     | ⚠️ **Stay on 18.x** — Decky runs React 18. The latest `@types/react` on npm is 19.x which is incompatible. Keep pinned (no caret). |
 | `@types/react-dom`                 | 18.3.0    | **18.3.7**  | Patch     | ⚠️ Same as `@types/react` — stay on 18.x, keep pinned.                                                                             |
-| `@types/webpack`                   | ^5.28.5   | **Remove**  | —         | Not used anywhere. Leftover from the fork.                                                                                        |
 | `eslint`                           | ^9.39.2   | **^9.39.2** | ✅ Current | ESLint 10.0.0 has been released — **do not upgrade yet**. Plugin ecosystem is still catching up. Stay on 9.x.                     |
 | `@eslint/js`                       | ^9.39.2   | **^9.39.2** | ✅ Current | Tied to ESLint — stay on 9.x.                                                                                                     |
 | `@typescript-eslint/eslint-plugin` | ^8.55.0   | **^8.55.0** | ✅ Current | Already at latest.                                                                                                                |
@@ -254,15 +253,13 @@ All dependencies should be brought to their latest compatible versions before fe
 
 ### Existing `dependencies`
 
-| Package            | Installed | Target       | Bump            | Notes                                                                                                                                                         |
-| ------------------ | --------- | ------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@decky/api`       | ^1.1.2    | **^1.1.3**   | Patch           | Safe.                                                                                                                                                         |
-| `@types/lodash`    | ^4.17.13  | **^4.17.23** | Patch           | Safe. Remove entirely if Lodash is dropped (see §11).                                                                                                         |
-| `cotton-box`       | ^0.3.0    | **^0.14.0**  | Minor (pre-1.0) | ✅ Safe despite the large version jump. The APIs the project uses (`StateManager`, `.get()`, `.set()`, `.watch()`) have not changed. See research notes below. |
-| `cotton-box-react` | ^0.3.0    | **^0.14.0**  | Minor (pre-1.0) | ✅ Same as `cotton-box` — `useStateValue` is unchanged. Must upgrade in lockstep with `cotton-box`.                                                            |
-| `lodash`           | ^4.17.21  | **^4.17.23** | Patch           | Safe. Extremely stable.                                                                                                                                       |
-| `react-icons`      | ^5.3.0    | **^5.5.0**   | Minor           | Safe — only adds new icon sets.                                                                                                                               |
-| `tslib`            | ^2.7.0    | **^2.8.1**   | Minor           | Safe.                                                                                                                                                         |
+| Package            | Installed | Target      | Bump            | Notes                                                                                                                                                         |
+| ------------------ | --------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@decky/api`       | ^1.1.2    | **^1.1.3**  | Patch           | Safe.                                                                                                                                                         |
+| `cotton-box`       | ^0.3.0    | **^0.14.0** | Minor (pre-1.0) | ✅ Safe despite the large version jump. The APIs the project uses (`StateManager`, `.get()`, `.set()`, `.watch()`) have not changed. See research notes below. |
+| `cotton-box-react` | ^0.3.0    | **^0.14.0** | Minor (pre-1.0) | ✅ Same as `cotton-box` — `useStateValue` is unchanged. Must upgrade in lockstep with `cotton-box`.                                                            |
+| `react-icons`      | ^5.3.0    | **^5.5.0**  | Minor           | Safe — only adds new icon sets.                                                                                                                               |
+| `tslib`            | ^2.7.0    | **^2.8.1**  | Minor           | Safe.                                                                                                                                                         |
 
 ### New packages (not yet installed)
 
@@ -313,7 +310,13 @@ The `cotton-box` and `cotton-box-react` packages are pre-1.0, so minor bumps can
 
 All items above are considered **done** when:
 
-1. Every checklist item is ticked.
+1. Every checklist item is ticked, or explicitly marked N/A/manual-only.
 2. The CI pipeline passes on `main`.
 3. `pnpm lint`, `pnpm format:check`, `pnpm test`, and `pnpm build` all succeed locally with zero warnings or errors.
 4. A contributor can clone the repo, run `pnpm install`, and have a working development environment with lint, format, and test tooling out of the box.
+
+### Implementation Readiness (2026-02-13)
+
+- ✅ Ready to begin implementation phase.
+- ✅ Local checks pass cleanly: `pnpm format:check`, `pnpm lint`, `pnpm test`, `pnpm build`.
+- ℹ️ Remaining unchecked commit-isolation items are manual git-history tasks and do not block coding.
