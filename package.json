@@ -1,15 +1,22 @@
 {
-  "name": "decky-pip",
+  "name": "decky-portal",
   "version": "1.0.0",
-  "description": "A plugin for viewing you favorite streams in-game",
+  "description": "A Decky plugin that adds a portable in-game web portal for streaming, browsing, and media playback.",
   "type": "module",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rossimo/decky-pip.git"
+    "url": "git+https://github.com/ajustinjames/decky-portal.git"
   },
   "keywords": [
     "decky",
@@ -17,33 +24,60 @@
     "plugin-template",
     "steam-deck",
     "deck",
-    "pip"
+    "portal",
+    "browser",
+    "streaming"
   ],
-  "author": "Ross Squires <ross.squires@gmail.com>",
+  "author": "Aaron James",
+  "contributors": [
+    "Ross Squires <ross.squires@gmail.com> (original author of decky-pip)"
+  ],
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/rossimo/decky-pip/issues"
+    "url": "https://github.com/ajustinjames/decky-portal/issues"
   },
-  "homepage": "https://github.com/rossimo/decky-pip#readme",
+  "homepage": "https://github.com/ajustinjames/decky-portal#readme",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
   "devDependencies": {
-    "@decky/rollup": "^1.0.1",
-    "@decky/ui": "^4.9.0",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "@types/webpack": "^5.28.5",
-    "rollup": "^4.22.5",
-    "typescript": "^5.6.2"
+    "@decky/rollup": "^1.0.2",
+    "@decky/ui": "^4.11.1",
+    "@eslint/js": "^9.39.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "happy-dom": "^20.6.1",
+    "prettier": "^3.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rollup": "^4.57.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@decky/api": "^1.1.2",
-    "@types/lodash": "^4.17.13",
-    "cotton-box": "^0.3.0",
-    "cotton-box-react": "^0.3.0",
-    "lodash": "^4.17.21",
-    "react-icons": "^5.3.0",
-    "tslib": "^2.7.0"
+    "@decky/api": "^1.1.3",
+    "cotton-box": "^0.14.0",
+    "cotton-box-react": "^0.14.0",
+    "react-icons": "^5.5.0",
+    "tslib": "^2.8.1"
   },
   "pnpm": {
+    "overrides": {
+      "glob@>=10.2.0 <10.5.0": "10.5.0",
+      "brace-expansion@^1.1.7": "1.1.12",
+      "brace-expansion@^2.0.0": "2.0.2"
+    },
     "peerDependencyRules": {
       "ignoreMissing": [
         "react",

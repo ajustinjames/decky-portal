@@ -1,0 +1,89 @@
+name: Release From PR
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  tag:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Determine next semver tag
+        id: semver
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const labels = (pr.labels || []).map((label) => String(label.name).toLowerCase());
+
+            let bump = null;
+            if (labels.includes('semver:major')) bump = 'major';
+            else if (labels.includes('semver:minor')) bump = 'minor';
+            else if (labels.includes('semver:patch')) bump = 'patch';
+
+            if (!bump) {
+              core.notice('No semver label found (semver:major|minor|patch). Skipping tag creation.');
+              core.setOutput('created', 'false');
+              return;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const { data: tags } = await github.rest.repos.listTags({ owner, repo, per_page: 100 });
+
+            const versions = tags
+              .map((tag) => tag.name)
+              .filter((name) => /^v\d+\.\d+\.\d+$/.test(name))
+              .map((name) => name.slice(1).split('.').map(Number))
+              .sort((a, b) => {
+                if (b[0] !== a[0]) return b[0] - a[0];
+                if (b[1] !== a[1]) return b[1] - a[1];
+                return b[2] - a[2];
+              });
+
+            let [major, minor, patch] = versions[0] ?? [0, 0, 0];
+
+            if (bump === 'major') {
+              major += 1;
+              minor = 0;
+              patch = 0;
+            } else if (bump === 'minor') {
+              minor += 1;
+              patch = 0;
+            } else {
+              patch += 1;
+            }
+
+            const tag = `v${major}.${minor}.${patch}`;
+            const ref = `refs/tags/${tag}`;
+            const sha = pr.merge_commit_sha || pr.head.sha;
+
+            try {
+              await github.rest.git.createRef({ owner, repo, ref, sha });
+            } catch (error) {
+              if (error.status === 422) {
+                core.setFailed(`Tag ${tag} already exists.`);
+                return;
+              }
+              throw error;
+            }
+
+            core.notice(`Created tag ${tag} from merged PR #${pr.number}.`);
+            core.setOutput('created', 'true');
+            core.setOutput('tag', tag);
+
+      - name: Release summary
+        if: steps.semver.outputs.created == 'true'
+        env:
+          TAG: ${{ steps.semver.outputs.tag }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Created ${TAG} from PR #${PR_NUMBER}"

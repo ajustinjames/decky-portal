@@ -1,46 +1,52 @@
-import merge from 'lodash/merge'
-import { FaTv } from "react-icons/fa";
-import { StateManager } from "cotton-box";
-import { quickAccessMenuClasses } from "@decky/ui";
-import { definePlugin, routerHook, } from "@decky/api";
+import { FaTv } from 'react-icons/fa';
+import { StateManager } from 'cotton-box';
+import { quickAccessMenuClasses } from '@decky/ui';
+import { definePlugin, routerHook } from '@decky/api';
 
-import { PipOuter } from "./pip";
-import { Settings } from "./settings";
-import { Position, ViewMode } from "./util";
-import { State, GlobalContext } from "./globalState";
+import { PortalViewOuter } from './components/portal-view';
+import { Settings } from './components/settings';
+import { Position, ViewMode } from './lib/util';
+import { State, GlobalContext } from './hooks/global-state';
+import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './lib/storage';
 
 export default definePlugin(() => {
-    const state = new StateManager<State>(merge<Partial<State>, State, Partial<State>>(
-        {},
-        {
-            viewMode: ViewMode.Closed,
-            visible: true,
-            position: Position.TopRight,
-            margin: 30,
-            size: 1,
-            url: "https://netflix.com"
-        },
-        JSON.parse(localStorage.getItem('pip') ?? '{}')));
+  const defaultState: State = {
+    viewMode: ViewMode.Closed,
+    visible: true,
+    position: Position.TopRight,
+    margin: 30,
+    size: 1,
+    url: 'https://netflix.com',
+  };
 
-    state.watch(({ position, margin, size, url }) =>
-        localStorage.setItem('pip', JSON.stringify({ position, margin, size, url })));
+  const state = new StateManager<State>({
+    ...defaultState,
+    ...getPersistedPortalState(localStorage),
+  });
 
-    routerHook.addGlobalComponent("PictureInPicture", () => {
-        return <GlobalContext.Provider value={state}>
-            <PipOuter />
-        </GlobalContext.Provider>
-    });
+  state.watch(({ position, margin, size, url }) =>
+    localStorage.setItem(PORTAL_STORAGE_KEY, JSON.stringify({ position, margin, size, url })),
+  );
 
-    return {
-        name: "Picture in Picture",
-        titleView: <div className={quickAccessMenuClasses.Title}>Picture in Picture</div>,
-        icon: <FaTv />,
-        content:
-            <GlobalContext.Provider value={state}>
-                <Settings />
-            </GlobalContext.Provider>,
-        onDismount() {
-            routerHook.removeGlobalComponent("PictureInPicture");
-        },
-    };
+  routerHook.addGlobalComponent('Portal', () => {
+    return (
+      <GlobalContext.Provider value={state}>
+        <PortalViewOuter />
+      </GlobalContext.Provider>
+    );
+  });
+
+  return {
+    name: 'Portal',
+    titleView: <div className={quickAccessMenuClasses.Title}>Portal</div>,
+    icon: <FaTv />,
+    content: (
+      <GlobalContext.Provider value={state}>
+        <Settings />
+      </GlobalContext.Provider>
+    ),
+    onDismount() {
+      routerHook.removeGlobalComponent('Portal');
+    },
+  };
 });
