@@ -22,7 +22,7 @@ export const Settings = () => {
     setGlobalState((state) => ({
       ...state,
       visible: true,
-      viewMode: state.viewMode == ViewMode.Closed ? ViewMode.Picture : state.viewMode,
+      viewMode: state.viewMode === ViewMode.Closed ? ViewMode.Picture : state.viewMode,
     }));
   }, [setGlobalState]);
 
@@ -40,7 +40,7 @@ export const Settings = () => {
   return (
     <>
       <PanelSection>
-        {viewMode == ViewMode.Closed && (
+        {viewMode === ViewMode.Closed && (
           <>
             <PanelSectionRow>
               <ButtonItem
@@ -58,7 +58,7 @@ export const Settings = () => {
             </PanelSectionRow>
           </>
         )}
-        {viewMode != ViewMode.Closed && (
+        {viewMode !== ViewMode.Closed && (
           <>
             <PanelSectionRow>
               <ButtonItem
@@ -78,7 +78,7 @@ export const Settings = () => {
             <PanelSectionRow>
               <ToggleField
                 label="Expand"
-                checked={viewMode == ViewMode.Expand}
+                checked={viewMode === ViewMode.Expand}
                 onChange={(checked) => {
                   setGlobalState((state) => ({
                     ...state,
@@ -89,7 +89,7 @@ export const Settings = () => {
             </PanelSectionRow>
           </>
         )}
-        {viewMode == ViewMode.Picture && (
+        {viewMode === ViewMode.Picture && (
           <>
             <PanelSectionRow>
               <DropdownItem
@@ -162,7 +162,7 @@ export const Settings = () => {
             </PanelSectionRow>
           </>
         )}
-        {viewMode != ViewMode.Closed && (
+        {viewMode !== ViewMode.Closed && (
           <>
             <PanelSectionRow>
               <ButtonItem
