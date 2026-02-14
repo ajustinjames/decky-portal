@@ -25,22 +25,22 @@ export default definePlugin(() => {
     state.watch(({ position, margin, size, url }) =>
         localStorage.setItem('pip', JSON.stringify({ position, margin, size, url })));
 
-    routerHook.addGlobalComponent("PictureInPicture", () => {
+    routerHook.addGlobalComponent("Portal", () => {
         return <GlobalContext.Provider value={state}>
             <PipOuter />
         </GlobalContext.Provider>
     });
 
     return {
-        name: "Picture in Picture",
-        titleView: <div className={quickAccessMenuClasses.Title}>Picture in Picture</div>,
+        name: "Portal",
+        titleView: <div className={quickAccessMenuClasses.Title}>Portal</div>,
         icon: <FaTv />,
         content:
             <GlobalContext.Provider value={state}>
                 <Settings />
             </GlobalContext.Provider>,
         onDismount() {
-            routerHook.removeGlobalComponent("PictureInPicture");
+            routerHook.removeGlobalComponent("Portal");
         },
     };
 });

@@ -1,15 +1,17 @@
 {
-  "name": "decky-pip",
+  "name": "decky-portal",
   "version": "1.0.0",
-  "description": "A plugin for viewing you favorite streams in-game",
+  "description": "A Decky plugin that adds a portable in-game web portal for streaming, browsing, and media playback.",
   "type": "module",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rossimo/decky-pip.git"
+    "url": "git+https://github.com/ajustinjames/decky-portal.git"
   },
   "keywords": [
     "decky",
@@ -17,20 +19,31 @@
     "plugin-template",
     "steam-deck",
     "deck",
-    "pip"
+    "portal",
+    "browser",
+    "streaming"
   ],
-  "author": "Ross Squires <ross.squires@gmail.com>",
+  "author": "Aaron James",
+  "contributors": [
+    "Ross Squires <ross.squires@gmail.com> (original author of decky-pip)"
+  ],
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/rossimo/decky-pip/issues"
+    "url": "https://github.com/ajustinjames/decky-portal/issues"
   },
-  "homepage": "https://github.com/rossimo/decky-pip#readme",
+  "homepage": "https://github.com/ajustinjames/decky-portal#readme",
   "devDependencies": {
     "@decky/rollup": "^1.0.1",
     "@decky/ui": "^4.9.0",
+    "@eslint/js": "^9.39.2",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@types/webpack": "^5.28.5",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "rollup": "^4.22.5",
     "typescript": "^5.6.2"
   },

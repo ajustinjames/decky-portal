@@ -1,11 +1,11 @@
 {
-  "name": "Picture in Picture",
-  "author": "Ross Squires",
+  "name": "Portal",
+  "author": "Aaron James",
   "flags": [],
   "api_version": 1,
   "publish": {
-    "tags": ["web", "video", "pip", "movies", "tv"],
-    "description": "Watch your favorite stream while you game!",
-    "image": "https://raw.githubusercontent.com/rossimo/decky-pip/refs/heads/main/picture.jpg"
+    "tags": ["portal", "browser", "streaming", "web", "video"],
+    "description": "Open a portable in-game web portal for streaming, browsing, and media while you play.",
+    "image": "https://raw.githubusercontent.com/ajustinjames/decky-portal/refs/heads/main/picture.jpg"
   }
 }
