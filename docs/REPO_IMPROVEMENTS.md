@@ -61,13 +61,13 @@ There is currently **no formatter** configured. Consistent formatting removes st
 
 ### Deliverables
 
-- [ ] Install Prettier: `pnpm add -D prettier`.
-- [ ] Create a `.prettierrc` with project-agreed settings (suggested starting point below).
-- [ ] Create a `.prettierignore` to skip `node_modules`, `out`, `dist`, and `pnpm-lock.yaml`.
-- [ ] Add a `format` script: `"format": "prettier --write \"src/**/*.{ts,tsx}\""`.
-- [ ] Add a `format:check` script: `"format:check": "prettier --check \"src/**/*.{ts,tsx}\""`.
-- [ ] Run the formatter against the existing codebase in a standalone commit so the diff is isolated.
-- [ ] Install `eslint-config-prettier` to disable ESLint rules that conflict with Prettier.
+- [x] Install Prettier: `pnpm add -D prettier`.
+- [x] Create a `.prettierrc` with project-agreed settings (suggested starting point below).
+- [x] Create a `.prettierignore` to skip `node_modules`, `out`, `dist`, and `pnpm-lock.yaml`.
+- [x] Add a `format` script: `"format": "prettier --write \"src/**/*.{ts,tsx}\""`.
+- [x] Add a `format:check` script: `"format:check": "prettier --check \"src/**/*.{ts,tsx}\""`.
+- [ ] Run the formatter against the existing codebase in a standalone commit so the diff is isolated. (Formatting is complete; isolated commit still pending.)
+- [x] Install `eslint-config-prettier` to disable ESLint rules that conflict with Prettier.
 
 ### Suggested `.prettierrc`
 
