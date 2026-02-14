@@ -1,9 +1,10 @@
 import { defineConfig } from 'vitest/config';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@decky/api': '/Users/ajames/workspace/decky-portal/src/__mocks__/decky-api.ts',
+      '@decky/api': fileURLToPath(new URL('./src/__mocks__/decky-api.ts', import.meta.url)),
     },
   },
   test: {
