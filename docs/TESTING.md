@@ -118,7 +118,7 @@ export const toaster = {
 
 ### 4.2 `@decky/ui` Mock
 
-```ts
+```tsx
 // src/__mocks__/@decky/ui.ts
 import { vi } from 'vitest';
 
