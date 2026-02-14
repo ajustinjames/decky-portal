@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { intersectRectangles } from './geometry';
+import { intersectRectangles } from './lib/geometry';
 
 describe('intersectRectangles', () => {
   it('returns null for an empty array', () => {

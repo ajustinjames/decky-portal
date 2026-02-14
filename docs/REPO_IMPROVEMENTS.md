@@ -178,13 +178,15 @@ Before new features add dozens of files, establish a clear directory convention.
 
 ### Deliverables
 
-- [ ] Decide on a file naming convention and document it (recommended: `kebab-case.tsx` for components, `kebab-case.ts` for non-JSX modules).
-- [ ] Rename existing files to match the convention if needed (e.g., `globalState.tsx` → `global-state.tsx`, `urlModal.tsx` → `url-modal.tsx`, `useUIComposition.tsx` → `use-ui-composition.tsx`).
-- [ ] Create a `src/components/` directory for React components.
-- [ ] Create a `src/hooks/` directory for custom hooks.
-- [ ] Create a `src/lib/` or `src/utils/` directory for pure utility functions (geometry, constants, helpers).
-- [ ] Update all internal import paths after restructuring.
-- [ ] Ensure the build still compiles cleanly after renames.
+- [x] Decide on a file naming convention and document it (recommended: `kebab-case.tsx` for components, `kebab-case.ts` for non-JSX modules).
+- [x] Rename existing files to match the convention if needed (e.g., `globalState.tsx` → `global-state.tsx`, `urlModal.tsx` → `url-modal.tsx`, `useUIComposition.tsx` → `use-ui-composition.tsx`).
+- [x] Create a `src/components/` directory for React components.
+- [x] Create a `src/hooks/` directory for custom hooks.
+- [x] Create a `src/lib/` or `src/utils/` directory for pure utility functions (geometry, constants, helpers).
+- [x] Update all internal import paths after restructuring.
+- [x] Ensure the build still compiles cleanly after renames.
+
+**Decision:** Use `kebab-case` for all source filenames. Organize by responsibility: UI in `src/components/`, hooks in `src/hooks/`, and shared non-UI modules in `src/lib/`.
 
 > **Open Question:** Should component and hook tests live alongside their source files (`Button.test.tsx` next to `Button.tsx`) or in a centralised `__tests__/` directory? Both are valid — decide before writing tests. Answer: I like tests next to the source so I remember to write them.
 

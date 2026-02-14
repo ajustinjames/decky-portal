@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { createLocalStorageMock } from './__mocks__/local-storage';
-import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './storage';
+import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './lib/storage';
 
 describe('portal storage', () => {
   it('returns empty object when no portal state is persisted', () => {

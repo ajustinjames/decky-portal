@@ -2,7 +2,7 @@ import { TextField, ConfirmModal, ModalRootProps } from '@decky/ui';
 import { useEffect, useState } from 'react';
 
 import { modalWithState } from './modal';
-import { useGlobalState } from './globalState';
+import { useGlobalState } from '../hooks/global-state';
 
 export const UrlModal = (props: ModalRootProps) => {
   const [{ url }, setGlobalState] = useGlobalState();

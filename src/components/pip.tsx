@@ -2,9 +2,9 @@ import { Router, WindowRouter, getGamepadNavigationTrees } from '@decky/ui';
 import isEqual from 'lodash/isEqual';
 import { useEffect, useState } from 'react';
 
-import { useGlobalState } from './globalState';
-import { intersectRectangles } from './geometry';
-import { UIComposition, useUIComposition } from './useUIComposition';
+import { useGlobalState } from '../hooks/global-state';
+import { intersectRectangles } from '../lib/geometry';
+import { UIComposition, useUIComposition } from '../hooks/use-ui-composition';
 import {
   PICTURE_HEIGHT,
   PICTURE_WIDTH,
@@ -12,7 +12,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   ViewMode,
-} from './util';
+} from '../lib/util';
 
 interface BrowserProps {
   url: string;

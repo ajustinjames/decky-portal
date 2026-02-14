@@ -1,7 +1,7 @@
 import { StateManager } from 'cotton-box';
 import { useContext, createContext } from 'react';
 
-import { Position, ViewMode } from './util';
+import { Position, ViewMode } from '../lib/util';
 import { useStateValue } from 'cotton-box-react';
 
 export interface State {

@@ -8,7 +8,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   ViewMode,
-} from './util';
+} from './lib/util';
 
 describe('util constants and enums', () => {
   it('exports expected screen constants', () => {

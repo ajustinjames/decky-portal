@@ -1,4 +1,4 @@
-import { State } from './globalState';
+import { State } from '../hooks/global-state';
 
 export const PORTAL_STORAGE_KEY = 'portal';
 

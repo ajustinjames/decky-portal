@@ -10,9 +10,9 @@ import {
 import { useEffect } from 'react';
 import { FaEdit } from 'react-icons/fa';
 
-import { Position, ViewMode } from './util';
-import { useGlobalState } from './globalState';
-import { UrlModalWithState } from './urlModal';
+import { Position, ViewMode } from '../lib/util';
+import { useGlobalState } from '../hooks/global-state';
+import { UrlModalWithState } from './url-modal';
 
 export const Settings = () => {
   const [{ viewMode, position, margin, url, size }, setGlobalState, stateContext] =

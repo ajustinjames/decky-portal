@@ -16,8 +16,8 @@ vi.mock('cotton-box-react', () => ({
 
 import { useContext } from 'react';
 import { useStateValue } from 'cotton-box-react';
-import { GlobalContext, State, useGlobalState } from './globalState';
-import { Position, ViewMode } from './util';
+import { GlobalContext, State, useGlobalState } from './hooks/global-state';
+import { Position, ViewMode } from './lib/util';
 
 const createInitialState = (): State => ({
   viewMode: ViewMode.Closed,

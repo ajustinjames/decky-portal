@@ -4,11 +4,11 @@ import { StateManager } from 'cotton-box';
 import { quickAccessMenuClasses } from '@decky/ui';
 import { definePlugin, routerHook } from '@decky/api';
 
-import { PipOuter } from './pip';
-import { Settings } from './settings';
-import { Position, ViewMode } from './util';
-import { State, GlobalContext } from './globalState';
-import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './storage';
+import { PipOuter } from './components/pip';
+import { Settings } from './components/settings';
+import { Position, ViewMode } from './lib/util';
+import { State, GlobalContext } from './hooks/global-state';
+import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './lib/storage';
 
 export default definePlugin(() => {
   const state = new StateManager<State>(
