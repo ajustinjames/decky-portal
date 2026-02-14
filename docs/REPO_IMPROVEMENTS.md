@@ -198,14 +198,14 @@ The root README is a leftover from the upstream fork and still says "Picute in P
 
 ### Deliverables
 
-- [ ] Write a new `README.md` that includes:
+- [x] Write a new `README.md` that includes:
   - Project name, tagline, and a brief description.
   - A screenshot or GIF (can be a placeholder until new branding is ready).
   - Installation instructions (Decky store or manual sideload).
   - Development setup instructions (`pnpm install`, `pnpm build`, deployment to Deck).
   - Link to the `docs/` folder for detailed documentation.
   - Licence and attribution (BSD-3-Clause, credit to Ross Squires).
-- [ ] Remove or replace the existing `picture.jpg` and `expand.jpg` screenshots.
+- [x] Remove or replace the existing `picture.jpg` and `expand.jpg` screenshots.
 
 ---
 
