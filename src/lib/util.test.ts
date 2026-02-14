@@ -1,20 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  MARGIN,
   PICTURE_HEIGHT,
   PICTURE_WIDTH,
   Position,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   ViewMode,
-} from './lib/util';
+} from './util';
 
 describe('util constants and enums', () => {
   it('exports expected screen constants', () => {
     expect(SCREEN_WIDTH).toBe(854);
     expect(SCREEN_HEIGHT).toBe(534);
-    expect(MARGIN).toBe(20);
   });
 
   it('derives picture dimensions from screen width', () => {

@@ -6,6 +6,6 @@
   "publish": {
     "tags": ["portal", "browser", "streaming", "web", "video"],
     "description": "Open a portable in-game web portal for streaming, browsing, and media while you play.",
-    "image": "https://raw.githubusercontent.com/ajustinjames/decky-portal/refs/heads/main/picture.jpg"
+    "image": ""
   }
 }

@@ -12,5 +12,9 @@ export const getPersistedPortalState = (storage: StorageReader): Partial<State> 
     return {};
   }
 
-  return JSON.parse(persisted) as Partial<State>;
+  try {
+    return JSON.parse(persisted) as Partial<State>;
+  } catch {
+    return {};
+  }
 };

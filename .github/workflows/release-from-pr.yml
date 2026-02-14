@@ -82,5 +82,8 @@ jobs:
 
       - name: Release summary
         if: steps.semver.outputs.created == 'true'
+        env:
+          TAG: ${{ steps.semver.outputs.tag }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          echo "Created ${{ steps.semver.outputs.tag }} from PR #${{ github.event.pull_request.number }}"
+          echo "Created ${TAG} from PR #${PR_NUMBER}"

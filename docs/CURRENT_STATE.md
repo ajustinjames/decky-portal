@@ -45,16 +45,16 @@
 
 ## State & Settings Summary
 
-The plugin currently tracks the following state, all persisted to `localStorage` under the key `portal`:
+The plugin currently tracks the following state under the key `portal`:
 
-| Field      | Purpose                                                                         |
-| ---------- | ------------------------------------------------------------------------------- |
-| `viewMode` | Current window state — Expand, Picture, or Closed                               |
-| `position` | One of eight screen positions for PiP mode                                      |
-| `visible`  | Whether the browser view is rendered (temporarily hidden during certain modals) |
-| `margin`   | Pixel margin from screen edges                                                  |
-| `size`     | Scale multiplier for the PiP window                                             |
-| `url`      | The currently loaded web address                                                |
+| Field      | Persisted | Purpose                                                                         |
+| ---------- | --------- | ------------------------------------------------------------------------------- |
+| `viewMode` | No        | Current window state — Expand, Picture, or Closed                               |
+| `position` | Yes       | One of eight screen positions for PiP mode                                      |
+| `visible`  | No        | Whether the browser view is rendered (temporarily hidden during certain modals) |
+| `margin`   | Yes       | Pixel margin from screen edges                                                  |
+| `size`     | Yes       | Scale multiplier for the PiP window                                             |
+| `url`      | Yes       | The currently loaded web address                                                |
 
 ---
 

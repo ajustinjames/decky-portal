@@ -22,6 +22,9 @@ coverage/
 # API keys and secrets
 .env
 
+# Lock files from other package managers
+package-lock.json
+
 # Dependency directory
 node_modules
 bower_components
