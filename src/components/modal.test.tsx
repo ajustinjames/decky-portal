@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import type { FC } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { StateManager } from 'cotton-box';
+import type { ModalRootProps } from '@decky/ui';
 
 import { modalWithState } from './modal';
 import { GlobalContext, State } from '../hooks/global-state';
@@ -20,12 +22,12 @@ describe('modalWithState', () => {
   it('wraps modal content with global state context', () => {
     const stateManager = new StateManager<State>(createInitialState());
 
-    const InnerModal: React.FC = () => {
+    const InnerModal: FC = () => {
       const context = useContext(GlobalContext);
       return <div>{context === stateManager ? 'Inner Modal' : 'Missing Context'}</div>;
     };
 
-    const WrappedModal = modalWithState(InnerModal as React.FC<any>);
+    const WrappedModal = modalWithState(InnerModal as FC<ModalRootProps>);
 
     render(<WrappedModal value={stateManager} closeModal={() => {}} />);
 

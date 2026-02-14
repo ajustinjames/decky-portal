@@ -1,6 +1,6 @@
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 
 import { Settings } from './settings';
 import { useGlobalState } from '../hooks/global-state';
@@ -15,13 +15,32 @@ vi.mock('./url-modal', () => ({
   UrlModalWithState: () => <div>URL Modal</div>,
 }));
 
+interface DropdownOption {
+  data: number;
+  label: string;
+}
+
 vi.mock('@decky/ui', () => ({
-  PanelSection: ({ children }: any) => <section>{children}</section>,
-  PanelSectionRow: ({ children }: any) => <div>{children}</div>,
-  ButtonItem: ({ label, children, onClick }: any) => (
-    <button onClick={onClick}>{label ?? children}</button>
-  ),
-  ToggleField: ({ label, checked, onChange }: any) => (
+  PanelSection: ({ children }: { children: ReactNode }) => <section>{children}</section>,
+  PanelSectionRow: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  ButtonItem: ({
+    label,
+    children,
+    onClick,
+  }: {
+    label?: string;
+    children?: ReactNode;
+    onClick?: () => void;
+  }) => <button onClick={onClick}>{label ?? children}</button>,
+  ToggleField: ({
+    label,
+    checked,
+    onChange,
+  }: {
+    label: string;
+    checked: boolean;
+    onChange: (val: boolean) => void;
+  }) => (
     <label>
       {label}
       <input
@@ -32,15 +51,29 @@ vi.mock('@decky/ui', () => ({
       />
     </label>
   ),
-  DropdownItem: ({ label, selectedOption, rgOptions, onMenuOpened, onChange }: any) => (
+  DropdownItem: ({
+    label,
+    selectedOption,
+    rgOptions,
+    onMenuOpened,
+    onChange,
+  }: {
+    label: string;
+    selectedOption: number;
+    rgOptions: DropdownOption[];
+    onMenuOpened?: () => void;
+    onChange: (option: DropdownOption) => void;
+  }) => (
     <div>
       <button onClick={onMenuOpened}>Open {label}</button>
       <select
         aria-label={label}
         value={selectedOption}
-        onChange={(e) => onChange(rgOptions.find((o: any) => o.data === Number(e.target.value)))}
+        onChange={(e) =>
+          onChange(rgOptions.find((o) => o.data === Number(e.target.value)) as DropdownOption)
+        }
       >
-        {rgOptions.map((option: any) => (
+        {rgOptions.map((option) => (
           <option key={option.data} value={option.data}>
             {option.label}
           </option>
@@ -48,7 +81,21 @@ vi.mock('@decky/ui', () => ({
       </select>
     </div>
   ),
-  SliderField: ({ label, value, onChange, min, max, step }: any) => (
+  SliderField: ({
+    label,
+    value,
+    onChange,
+    min,
+    max,
+    step,
+  }: {
+    label: string;
+    value: number;
+    onChange: (val: number) => void;
+    min: number;
+    max: number;
+    step: number;
+  }) => (
     <label>
       {label}
       <input

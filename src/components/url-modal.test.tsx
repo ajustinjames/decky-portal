@@ -1,6 +1,6 @@
-import React from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 
 import { UrlModal } from './url-modal';
 import { useGlobalState } from '../hooks/global-state';
@@ -11,14 +11,22 @@ vi.mock('../hooks/global-state', () => ({
 }));
 
 vi.mock('@decky/ui', () => ({
-  ConfirmModal: ({ children, onOK, onCancel }: any) => (
+  ConfirmModal: ({
+    children,
+    onOK,
+    onCancel,
+  }: {
+    children: ReactNode;
+    onOK: () => void;
+    onCancel: () => void;
+  }) => (
     <div>
       <button onClick={onOK}>OK</button>
       <button onClick={onCancel}>Cancel</button>
       {children}
     </div>
   ),
-  TextField: ({ value, onChange }: any) => (
+  TextField: ({ value, onChange }: { value: string; onChange: (e: unknown) => void }) => (
     <input aria-label="url" value={value} onChange={onChange} />
   ),
 }));

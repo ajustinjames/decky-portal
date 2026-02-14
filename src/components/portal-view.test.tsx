@@ -1,4 +1,3 @@
-import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, waitFor } from '@testing-library/react';
 import { Router } from '@decky/ui';
@@ -23,19 +22,19 @@ vi.mock('../hooks/use-ui-composition', () => ({
   UIComposition: {
     Notification: 1,
   },
-  useUIComposition: (...args: any[]) => useUIComposition(...args),
+  useUIComposition: (...args: unknown[]) => useUIComposition(...args),
 }));
 
 vi.mock('@decky/ui', () => ({
   Router: {
     WindowStore: {
       GamepadUIMainWindowInstance: {
-        CreateBrowserView: (...args: any[]) => createBrowserView(...args),
+        CreateBrowserView: (...args: unknown[]) => createBrowserView(...args),
       },
     },
   },
   WindowRouter: {},
-  getGamepadNavigationTrees: (...args: any[]) => getGamepadNavigationTrees(...args),
+  getGamepadNavigationTrees: (...args: unknown[]) => getGamepadNavigationTrees(...args),
 }));
 
 const createState = (viewMode: ViewMode, position = Position.TopRight, margin = 20) => ({
@@ -84,13 +83,13 @@ describe('PortalView and PortalViewOuter', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
     const errorSpy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {});
-    const original = Router.WindowStore.GamepadUIMainWindowInstance;
-    Router.WindowStore.GamepadUIMainWindowInstance = undefined as never;
+    const original = Router.WindowStore!.GamepadUIMainWindowInstance;
+    Router.WindowStore!.GamepadUIMainWindowInstance = undefined as never;
 
     try {
       expect(() => render(<PortalView />)).toThrow('Unable to access Decky main window instance');
     } finally {
-      Router.WindowStore.GamepadUIMainWindowInstance = original;
+      Router.WindowStore!.GamepadUIMainWindowInstance = original;
       errorSpy.mockRestore();
     }
   });
@@ -108,7 +107,7 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
-    const [x, y, width, height] = setBounds.mock.calls.at(-1)!;
+    const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBeCloseTo(492.4, 3);
     expect(y).toBeCloseTo(20, 3);
     expect(width).toBeCloseTo(341.6, 3);
@@ -177,7 +176,7 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
-    const [x, y, width, height] = setBounds.mock.calls.at(-1)!;
+    const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBe(130);
     expect(y).toBe(30);
     expect(width).toBe(494);
@@ -204,7 +203,7 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
-    const [x, y, width, height] = setBounds.mock.calls.at(-1)!;
+    const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBeCloseTo(expectedX, 3);
     expect(y).toBeCloseTo(expectedY, 3);
     expect(width).toBeCloseTo(341.6, 3);
