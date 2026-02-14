@@ -165,8 +165,10 @@ The current state is persisted under the key `"pip"`. This should be migrated to
   1. Reads `localStorage.getItem('pip')`.
   2. If data exists and `'portal'` does not, copies the data to `'portal'` and removes `'pip'`.
   3. If both exist, prefers `'portal'` (the migrated key).
-- [ ] Update `src/index.tsx` to read/write under `'portal'`.
+- [x] Update `src/index.tsx` to read/write under `'portal'`.
 - [ ] Add a unit test for the migration logic.
+
+> Decision: For a greenfield setup with no legacy installs, migration from `pip` to `portal` is intentionally skipped.
 
 ---
 

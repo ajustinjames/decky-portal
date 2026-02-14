@@ -8,6 +8,7 @@ import { PipOuter } from './pip';
 import { Settings } from './settings';
 import { Position, ViewMode } from './util';
 import { State, GlobalContext } from './globalState';
+import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './storage';
 
 export default definePlugin(() => {
   const state = new StateManager<State>(
@@ -21,12 +22,12 @@ export default definePlugin(() => {
         size: 1,
         url: 'https://netflix.com',
       },
-      JSON.parse(localStorage.getItem('pip') ?? '{}'),
+      getPersistedPortalState(localStorage),
     ),
   );
 
   state.watch(({ position, margin, size, url }) =>
-    localStorage.setItem('pip', JSON.stringify({ position, margin, size, url })),
+    localStorage.setItem(PORTAL_STORAGE_KEY, JSON.stringify({ position, margin, size, url })),
   );
 
   routerHook.addGlobalComponent('Portal', () => {
