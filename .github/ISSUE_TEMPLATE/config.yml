@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions & Discussions
+    url: https://github.com/ajustinjames/decky-portal/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: Decky Loader Discord
+    url: https://deckbrew.xyz/discord
+    about: Get help from the broader Decky community

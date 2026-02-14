@@ -1,0 +1,108 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the information below to help us understand and reproduce the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: What happened? What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Open the plugin...
+        2. Navigate to...
+        3. Click on...
+        4. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe the actual behavior
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin Version
+      description: What version of Decky Portal are you using?
+      placeholder: e.g., 1.0.0 or commit hash
+    validations:
+      required: true
+
+  - type: input
+    id: decky-version
+    attributes:
+      label: Decky Loader Version
+      description: What version of Decky Loader are you using?
+      placeholder: e.g., 2.12.0
+    validations:
+      required: false
+
+  - type: input
+    id: steamdeck-version
+    attributes:
+      label: Steam Deck OS Version
+      description: What version of SteamOS are you running?
+      placeholder: e.g., 3.5.7
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Please provide any relevant logs. You can find plugin logs in Decky Loader's console.
+        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here (screenshots, videos, etc.)
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues to ensure this bug has not already been reported
+          required: true
+        - label: I have tested with the latest version of the plugin
+          required: false
