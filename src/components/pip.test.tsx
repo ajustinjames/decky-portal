@@ -302,5 +302,4 @@ describe('Pip and PipOuter', () => {
       vi.useRealTimers();
     }
   });
-
 });
