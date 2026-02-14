@@ -314,7 +314,7 @@ const renderWithState = (overrides: Partial<State> = {}) => {
 | Flow                       | Steps                                                                                                                                |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | Open → Set URL → Close     | Render `Settings` → click Open → click Address → enter URL → confirm → click Close → verify state transitions.                       |
-| Position change avoids QAM | Provide mock `getGamepadNavigationTrees` returning a QAM tree → render `Pip` → assert that the computed bounds avoid the QAM region. |
+| Position change avoids QAM | Provide mock `getGamepadNavigationTrees` returning a QAM tree → render `PortalView` → assert that the computed bounds avoid the QAM region. |
 | Persistence round-trip     | Set state → verify `localStorage` is written → re-initialise state from `localStorage` → verify values match.                        |
 
 ---

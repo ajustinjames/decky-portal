@@ -3,7 +3,7 @@ import { StateManager } from 'cotton-box';
 import { quickAccessMenuClasses } from '@decky/ui';
 import { definePlugin, routerHook } from '@decky/api';
 
-import { PipOuter } from './components/pip';
+import { PortalViewOuter } from './components/portal-view';
 import { Settings } from './components/settings';
 import { Position, ViewMode } from './lib/util';
 import { State, GlobalContext } from './hooks/global-state';
@@ -31,7 +31,7 @@ export default definePlugin(() => {
   routerHook.addGlobalComponent('Portal', () => {
     return (
       <GlobalContext.Provider value={state}>
-        <PipOuter />
+        <PortalViewOuter />
       </GlobalContext.Provider>
     );
   });

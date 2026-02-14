@@ -45,7 +45,7 @@
 
 ## State & Settings Summary
 
-The plugin currently tracks the following state, all persisted to `localStorage` under the key `pip`:
+The plugin currently tracks the following state, all persisted to `localStorage` under the key `portal`:
 
 | Field      | Purpose                                                                         |
 | ---------- | ------------------------------------------------------------------------------- |

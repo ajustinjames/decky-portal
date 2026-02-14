@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, waitFor } from '@testing-library/react';
 import { Router } from '@decky/ui';
 
-import { Pip, PipOuter } from './pip';
+import { PortalView, PortalViewOuter } from './portal-view';
 import { useGlobalState } from '../hooks/global-state';
 import { Position, ViewMode } from '../lib/util';
 
@@ -47,7 +47,7 @@ const createState = (viewMode: ViewMode, position = Position.TopRight, margin = 
   url: 'https://netflix.com',
 });
 
-describe('Pip and PipOuter', () => {
+describe('PortalView and PortalViewOuter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -66,16 +66,16 @@ describe('Pip and PipOuter', () => {
   it('returns null from outer component when closed', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Closed)] as never);
 
-    const { container } = render(<PipOuter />);
+    const { container } = render(<PortalViewOuter />);
 
     expect(container).toBeEmptyDOMElement();
     expect(createBrowserView).not.toHaveBeenCalled();
   });
 
-  it('renders pip from outer component when open', () => {
+  it('renders portal view from outer component when open', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
-    render(<PipOuter />);
+    render(<PortalViewOuter />);
 
     expect(createBrowserView).toHaveBeenCalledTimes(1);
   });
@@ -88,7 +88,7 @@ describe('Pip and PipOuter', () => {
     Router.WindowStore.GamepadUIMainWindowInstance = undefined as never;
 
     try {
-      expect(() => render(<Pip />)).toThrow('Unable to access Decky main window instance');
+      expect(() => render(<PortalView />)).toThrow('Unable to access Decky main window instance');
     } finally {
       Router.WindowStore.GamepadUIMainWindowInstance = original;
       errorSpy.mockRestore();
@@ -100,7 +100,7 @@ describe('Pip and PipOuter', () => {
       createState(ViewMode.Picture, Position.TopRight, 20),
     ] as never);
 
-    const { unmount } = render(<Pip />);
+    const { unmount } = render(<PortalView />);
 
     await waitFor(() => {
       expect(setVisible).toHaveBeenCalledWith(true);
@@ -171,7 +171,7 @@ describe('Pip and PipOuter', () => {
       createState(ViewMode.Expand, Position.BottomRight, 10),
     ] as never);
 
-    render(<Pip />);
+    render(<PortalView />);
 
     await waitFor(() => {
       expect(setBounds).toHaveBeenCalled();
@@ -198,7 +198,7 @@ describe('Pip and PipOuter', () => {
       createState(ViewMode.Picture, position as Position, 20),
     ] as never);
 
-    render(<Pip />);
+    render(<PortalView />);
 
     await waitFor(() => {
       expect(setBounds).toHaveBeenCalled();
@@ -245,7 +245,7 @@ describe('Pip and PipOuter', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
     try {
-      render(<Pip />);
+      render(<PortalView />);
 
       expect(setBounds).toHaveBeenCalled();
       const initialCalls = setBounds.mock.calls.length;
@@ -289,7 +289,7 @@ describe('Pip and PipOuter', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
     try {
-      render(<Pip />);
+      render(<PortalView />);
 
       const initialCalls = setBounds.mock.calls.length;
 

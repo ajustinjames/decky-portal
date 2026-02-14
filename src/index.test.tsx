@@ -8,8 +8,8 @@ vi.mock('@decky/ui', () => ({
   },
 }));
 
-vi.mock('./components/pip', () => ({
-  PipOuter: () => <div>Pip Outer</div>,
+vi.mock('./components/portal-view', () => ({
+  PortalViewOuter: () => <div>Portal View Outer</div>,
 }));
 
 vi.mock('./components/settings', () => ({

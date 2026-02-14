@@ -21,7 +21,7 @@ pnpm test:watch       # Vitest watch mode
 pnpm test:coverage    # Vitest with coverage (80% thresholds for statements/functions/lines, 75% branches)
 ```
 
-Run a single test file: `pnpm vitest run src/components/pip.test.tsx`
+Run a single test file: `pnpm vitest run src/components/portal-view.test.tsx`
 
 **Requirements:** Node >=22 (see .nvmrc), pnpm >=9
 
@@ -44,7 +44,7 @@ Access state in components via the `useGlobalState()` hook which returns `{ stat
 ### Core Components
 
 - **`src/index.tsx`** — Plugin entry point. Registers global component and settings via `definePlugin()`.
-- **`src/components/pip.tsx`** — Main browser view (~700 lines). Manages BrowserView lifecycle, calculates positioning to avoid Steam UI overlays (nav menu, QAM, virtual keyboard). Polls UI bounds every 250ms.
+- **`src/components/portal-view.tsx`** — Main browser view (~700 lines). Manages BrowserView lifecycle, calculates positioning to avoid Steam UI overlays (nav menu, QAM, virtual keyboard). Polls UI bounds every 250ms.
 - **`src/components/settings.tsx`** — Quick Access Menu settings panel.
 - **`src/components/modal.tsx`** — HOC (`modalWithState`) that wraps modals with global state context.
 - **`src/components/url-modal.tsx`** — URL input modal.
@@ -62,7 +62,7 @@ Access state in components via the `useGlobalState()` hook which returns `{ stat
 
 ### Browser Integration
 
-Uses Steam's internal browser via `Router.WindowStore?.GamepadUIMainWindowInstance.CreateBrowserView()`. The BrowserView is managed with `LoadURL`, `SetBounds`, `SetVisible`, `Destroy`. Attached to `window.pip` for debugging.
+Uses Steam's internal browser via `Router.WindowStore?.GamepadUIMainWindowInstance.CreateBrowserView()`. The BrowserView is managed with `LoadURL`, `SetBounds`, `SetVisible`, `Destroy`. Attached to `window.portal` for debugging.
 
 ### Testing
 

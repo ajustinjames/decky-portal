@@ -69,10 +69,10 @@ const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
       throw new Error('Unable to access Decky main window instance');
     }
 
-    const view = root.CreateBrowserView('pip');
+    const view = root.CreateBrowserView('portal');
     const browser = view.GetBrowser();
 
-    (window as unknown as { pip?: BrowserViewHandle }).pip = view;
+    (window as unknown as { portal?: BrowserViewHandle }).portal = view;
 
     return {
       view,
@@ -192,7 +192,7 @@ const useDeckComponentBounds = () => {
   return state;
 };
 
-export const Pip = () => {
+export const PortalView = () => {
   const { nav, qam, virtualKeyboard } = useDeckComponentBounds();
   const [{ viewMode, position, size, url, visible, ...settings }] = useGlobalState();
 
@@ -313,12 +313,12 @@ export const Pip = () => {
   return <Browser url={url} visible={visible} {...bounds} />;
 };
 
-export const PipOuter = () => {
+export const PortalViewOuter = () => {
   const [{ viewMode }] = useGlobalState();
 
   if (viewMode === ViewMode.Closed) {
     return null;
   }
 
-  return <Pip />;
+  return <PortalView />;
 };

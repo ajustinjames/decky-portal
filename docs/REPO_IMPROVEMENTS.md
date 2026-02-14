@@ -48,7 +48,7 @@ There is currently **no linter** configured in the repo. This means code style, 
 
 | Rule                                 | Reason                                                                                                                                 |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `@typescript-eslint/no-explicit-any` | Warn — the codebase currently uses `any` in several places (`pip.tsx`, `index.tsx`). Flag them so they can be addressed incrementally. |
+| `@typescript-eslint/no-explicit-any` | Warn — the codebase currently uses `any` in several places (`portal-view.tsx`, `index.tsx`). Flag them so they can be addressed incrementally. |
 | `react-hooks/rules-of-hooks`         | Error — prevents hooks from being called conditionally.                                                                                |
 | `react-hooks/exhaustive-deps`        | Warn — catches missing dependencies in `useEffect`.                                                                                    |
 | `no-console`                         | Warn — prevents accidental `console.log` shipping in production.                                                                       |
