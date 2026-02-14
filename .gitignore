@@ -1,4 +1,3 @@
-lib-cov
 *.seed
 *.log
 *.csv
@@ -14,7 +13,11 @@ results
 tmp
 
 # Coverage reports
-coverage
+coverage/
+
+# Tooling caches
+.eslintcache
+*.tsbuildinfo
 
 # API keys and secrets
 .env

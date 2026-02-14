@@ -133,11 +133,11 @@ The current `.gitignore` is adequate but has gaps.
 
 ### Deliverables
 
-- [ ] Add `coverage/` (Vitest coverage output).
-- [ ] Add `*.tsbuildinfo` (TypeScript incremental build cache).
-- [ ] Add `.eslintcache`.
-- [ ] Confirm `out/` and `dist/` are already covered (they are).
-- [ ] Remove `lib-cov` (leftover from Istanbul v1, no longer relevant).
+- [x] Add `coverage/` (Vitest coverage output).
+- [x] Add `*.tsbuildinfo` (TypeScript incremental build cache).
+- [x] Add `.eslintcache`.
+- [x] Confirm `out/` and `dist/` are already covered (they are).
+- [x] Remove `lib-cov` (leftover from Istanbul v1, no longer relevant).
 
 ---
 
@@ -147,11 +147,11 @@ The existing `tsconfig.json` is solid. A few improvements will catch more bugs a
 
 ### Deliverables
 
-- [ ] Add `"forceConsistentCasingInFileNames": true` — prevents casing-related import bugs on case-insensitive file systems.
-- [ ] Add `"skipLibCheck": true` — speeds up compilation by skipping type-checking of declaration files in `node_modules`.
-- [ ] Add `"resolveJsonModule": true` — allows importing JSON files (useful if bookmark data or config is stored as JSON).
-- [ ] Consider adding `"isolatedModules": true` — required for compatibility with tools like Vitest and esbuild that process files individually.
-- [ ] Review `"noUnusedLocals"` and `"noUnusedParameters"` — keep as `true`, they complement ESLint.
+- [x] Add `"forceConsistentCasingInFileNames": true` — prevents casing-related import bugs on case-insensitive file systems.
+- [x] Add `"skipLibCheck": true` — speeds up compilation by skipping type-checking of declaration files in `node_modules`.
+- [x] Add `"resolveJsonModule": true` — allows importing JSON files (useful if bookmark data or config is stored as JSON).
+- [x] Consider adding `"isolatedModules": true` — required for compatibility with tools like Vitest and esbuild that process files individually.
+- [x] Review `"noUnusedLocals"` and `"noUnusedParameters"` — keep as `true`, they complement ESLint.
 
 ---
 
