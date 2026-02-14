@@ -291,14 +291,14 @@ The `cotton-box` and `cotton-box-react` packages are pre-1.0, so minor bumps can
 
 ### Checklist
 
-- [ ] Run `pnpm outdated` to confirm versions haven't moved since this doc was written.
-- [ ] Update `devDependencies` in `package.json` per the table above.
-- [ ] Update `dependencies` in `package.json` per the table above.
-- [ ] Remove `@types/webpack` from `devDependencies`.
-- [ ] Run `pnpm install` and verify the lockfile updates cleanly.
-- [ ] Run `pnpm build` to confirm the project compiles with the new versions.
-- [ ] Run `pnpm lint` to confirm no new lint errors.
-- [ ] Run `pnpm audit` and resolve any advisories.
+- [x] Run `pnpm outdated` to confirm versions haven't moved since this doc was written.
+- [x] Update `devDependencies` in `package.json` per the table above.
+- [x] Update `dependencies` in `package.json` per the table above.
+- [x] Remove `@types/webpack` from `devDependencies`.
+- [x] Run `pnpm install` and verify the lockfile updates cleanly.
+- [x] Run `pnpm build` to confirm the project compiles with the new versions.
+- [x] Run `pnpm lint` to confirm no new lint errors.
+- [x] Run `pnpm audit` and resolve any advisories.
 - [ ] Commit the lockfile update in an isolated commit titled `chore: update dependencies`.
 
 --
