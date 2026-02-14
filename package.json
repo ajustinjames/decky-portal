@@ -12,7 +12,10 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "deck:build": "./scripts/build.sh",
+    "deck:deploy": "./scripts/deploy.sh",
+    "deck:builddeploy": "pnpm deck:build && pnpm deck:deploy"
   },
   "repository": {
     "type": "git",

@@ -12,7 +12,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 - Node.js >= 22 (see `.nvmrc`)
 - pnpm >= 9
-- A Steam Deck or development environment with Decky Loader
+- Docker (for building the plugin inside the Decky builder image)
+- A Steam Deck with Decky Loader and SSH enabled (for hardware testing)
 
 ### Setting Up Development Environment
 
@@ -29,6 +30,16 @@ By participating in this project, you agree to maintain a respectful and inclusi
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
+### Deploying to Steam Deck
+
+1. Copy `deck.example.json` to `deck.json` (gitignored) and update `deckip` and `deckpass` to match your Deck.
+2. Enable SSH on your Deck (Desktop Mode > Konsole > `sudo systemctl enable --now sshd`).
+3. Build and deploy:
+   ```bash
+   pnpm deck:builddeploy
+   ```
+   This builds the plugin inside Docker, deploys the zip over SSH, and restarts plugin_loader.
 
 ## Development Workflow
 
