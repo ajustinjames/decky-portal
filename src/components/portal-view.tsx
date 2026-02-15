@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useGlobalState } from '../hooks/global-state';
 import { intersectRectangles } from '../lib/geometry';
 import { UIComposition, useUIComposition } from '../hooks/use-ui-composition';
+import { BAR_WIDTH, ControlBar } from './control-bar';
 import {
   PICTURE_HEIGHT,
   PICTURE_WIDTH,
@@ -310,7 +311,37 @@ export const PortalView = () => {
       break;
   }
 
-  return <Browser url={url} visible={visible} {...bounds} />;
+  const barOnLeft =
+    viewMode === ViewMode.Picture &&
+    (position === Position.TopRight ||
+      position === Position.Right ||
+      position === Position.BottomRight);
+
+  const barSide = barOnLeft ? 'left' : 'right';
+
+  const barX = barOnLeft ? bounds.x : bounds.x + bounds.width - BAR_WIDTH;
+  const browserX = barOnLeft ? bounds.x + BAR_WIDTH : bounds.x;
+  const browserWidth = bounds.width - BAR_WIDTH;
+
+  return (
+    <>
+      <Browser
+        url={url}
+        visible={visible}
+        x={browserX}
+        y={bounds.y}
+        width={browserWidth}
+        height={bounds.height}
+      />
+      <ControlBar
+        x={barX}
+        y={bounds.y}
+        height={bounds.height}
+        side={barSide}
+        viewMode={viewMode}
+      />
+    </>
+  );
 };
 
 export const PortalViewOuter = () => {
