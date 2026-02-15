@@ -79,18 +79,17 @@ describe('PortalView and PortalViewOuter', () => {
     expect(createBrowserView).toHaveBeenCalledTimes(1);
   });
 
-  it('throws when decky main window instance is unavailable', () => {
+  it('renders gracefully when decky main window instance is unavailable', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
-    const errorSpy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {});
     const original = Router.WindowStore!.GamepadUIMainWindowInstance;
     Router.WindowStore!.GamepadUIMainWindowInstance = undefined as never;
 
     try {
-      expect(() => render(<PortalView />)).toThrow('Unable to access Decky main window instance');
+      const { container } = render(<PortalView />);
+      expect(container.innerHTML).toBe('');
     } finally {
       Router.WindowStore!.GamepadUIMainWindowInstance = original;
-      errorSpy.mockRestore();
     }
   });
 

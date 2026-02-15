@@ -24,7 +24,8 @@ export const Settings = () => {
       visible: true,
       viewMode: state.viewMode === ViewMode.Closed ? ViewMode.Picture : state.viewMode,
     }));
-  }, [setGlobalState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const positionOptions = [
     { label: 'Top Left', data: Position.TopLeft },

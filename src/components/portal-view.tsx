@@ -61,12 +61,12 @@ interface DeckWindow {
 const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
   useUIComposition(UIComposition.Notification);
 
-  const [{ browser, view }] = useState<{ browser: BrowserHandle; view: BrowserViewHandle }>(() => {
+  const [handles] = useState<{ browser: BrowserHandle; view: BrowserViewHandle } | null>(() => {
     const root = Router.WindowStore?.GamepadUIMainWindowInstance as
       | (WindowRouter & MainWindowInstance)
       | undefined;
     if (!root) {
-      throw new Error('Unable to access Decky main window instance');
+      return null;
     }
 
     const view = root.CreateBrowserView('portal');
@@ -81,20 +81,20 @@ const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
   });
 
   useEffect(() => {
-    browser.SetVisible(visible);
-  }, [browser, visible]);
+    handles?.browser.SetVisible(visible);
+  }, [handles, visible]);
 
   useEffect(() => {
-    view.LoadURL(url);
-  }, [url, view]);
+    handles?.view.LoadURL(url);
+  }, [url, handles]);
 
   useEffect(() => {
-    browser.SetBounds(x, y, width, height);
-  }, [browser, x, y, width, height]);
+    handles?.browser.SetBounds(x, y, width, height);
+  }, [handles, x, y, width, height]);
 
   useEffect(() => {
-    return () => view.Destroy();
-  }, [view]);
+    return () => handles?.view.Destroy();
+  }, [handles]);
 
   return null;
 };
