@@ -114,6 +114,7 @@ vi.mock('@decky/ui', () => ({
 
 const createState = (viewMode: ViewMode) => ({
   viewMode,
+  previousViewMode: ViewMode.Picture,
   visible: true,
   position: Position.TopRight,
   margin: 30,

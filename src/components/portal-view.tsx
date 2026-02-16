@@ -5,6 +5,7 @@ import { useGlobalState } from '../hooks/global-state';
 import { intersectRectangles } from '../lib/geometry';
 import { UIComposition, useUIComposition } from '../hooks/use-ui-composition';
 import { BAR_WIDTH, ControlBar } from './control-bar';
+import { MinimisedIndicator } from './minimised-indicator';
 import {
   PICTURE_HEIGHT,
   PICTURE_WIDTH,
@@ -259,7 +260,10 @@ export const PortalView = () => {
 
     case ViewMode.Minimised:
       return (
-        <Browser url={url} visible={false} x={0} y={0} width={0} height={0} />
+        <>
+          <Browser url={url} visible={false} x={0} y={0} width={0} height={0} />
+          <MinimisedIndicator position={position} margin={settings.margin} />
+        </>
       );
 
     case ViewMode.Picture:

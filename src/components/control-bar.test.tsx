@@ -20,6 +20,7 @@ vi.mock('react-icons/fa', () => ({
 const createMockState = (viewMode: ViewMode, size = 1.0) => {
   let state = {
     viewMode,
+    previousViewMode: ViewMode.Picture,
     visible: true,
     position: 1,
     margin: 20,
@@ -136,7 +137,7 @@ describe('ControlBar', () => {
     expect(mock.getState().viewMode).toBe(ViewMode.Picture);
   });
 
-  it('sets viewMode to Closed when clicking Minimise', () => {
+  it('sets viewMode to Minimised and saves previousViewMode when clicking Minimise', () => {
     const mock = createMockState(ViewMode.Picture);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
@@ -145,8 +146,22 @@ describe('ControlBar', () => {
     );
 
     fireEvent.click(screen.getByLabelText('Minimise'));
-    expect(mock.getState().viewMode).toBe(ViewMode.Closed);
+    expect(mock.getState().viewMode).toBe(ViewMode.Minimised);
+    expect(mock.getState().previousViewMode).toBe(ViewMode.Picture);
     expect(mock.getState().visible).toBe(true);
+  });
+
+  it('saves Expand as previousViewMode when minimising from Expand mode', () => {
+    const mock = createMockState(ViewMode.Expand);
+    vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
+
+    render(
+      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />,
+    );
+
+    fireEvent.click(screen.getByLabelText('Minimise'));
+    expect(mock.getState().viewMode).toBe(ViewMode.Minimised);
+    expect(mock.getState().previousViewMode).toBe(ViewMode.Expand);
   });
 
   it('sets viewMode to Closed and visible to false when clicking Close', () => {

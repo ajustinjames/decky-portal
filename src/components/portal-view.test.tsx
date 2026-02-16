@@ -18,6 +18,12 @@ vi.mock('../hooks/global-state', () => ({
   useGlobalState: vi.fn(),
 }));
 
+vi.mock('./minimised-indicator', () => ({
+  MinimisedIndicator: ({ position, margin }: { position: number; margin: number }) => (
+    <div data-testid="minimised-indicator" data-position={position} data-margin={margin} />
+  ),
+}));
+
 vi.mock('../hooks/use-ui-composition', () => ({
   UIComposition: {
     Notification: 1,
@@ -39,6 +45,7 @@ vi.mock('@decky/ui', () => ({
 
 const createState = (viewMode: ViewMode, position = Position.TopRight, margin = 20) => ({
   viewMode,
+  previousViewMode: ViewMode.Picture,
   visible: true,
   position,
   margin,
@@ -84,12 +91,13 @@ describe('PortalView and PortalViewOuter', () => {
     expect(createBrowserView).toHaveBeenCalledTimes(1);
   });
 
-  it('creates browser view when minimised (keeps it alive)', () => {
+  it('creates browser view when minimised (keeps it alive) and renders indicator', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Minimised)] as never);
 
-    render(<PortalViewOuter />);
+    const { container } = render(<PortalViewOuter />);
 
     expect(createBrowserView).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('[data-testid="minimised-indicator"]')).toBeTruthy();
   });
 
   it('sets bounds to 0x0 and hides browser when minimised', async () => {

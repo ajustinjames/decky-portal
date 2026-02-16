@@ -29,7 +29,8 @@ export const ControlBar = ({ x, y, height, side: _side, viewMode }: ControlBarPr
   const minimise = () => {
     setState((s) => ({
       ...s,
-      viewMode: ViewMode.Closed,
+      previousViewMode: s.viewMode,
+      viewMode: ViewMode.Minimised,
     }));
   };
 

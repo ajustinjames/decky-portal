@@ -61,6 +61,7 @@ describe('plugin entrypoint', () => {
 
     stateManager.set({
       viewMode: 2,
+      previousViewMode: 2,
       visible: true,
       position: 3,
       margin: 45,

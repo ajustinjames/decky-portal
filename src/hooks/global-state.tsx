@@ -6,6 +6,7 @@ import { useStateValue } from 'cotton-box-react';
 
 export interface State {
   viewMode: ViewMode;
+  previousViewMode: ViewMode;
   position: Position;
   visible: boolean;
   margin: number;
