@@ -32,7 +32,19 @@ SSH_TARGET="${DECK_USER}@${DECK_IP}"
 CTRL_SOCK="/tmp/deck-deploy-$$"
 SSH_OPTS="-p ${DECK_PORT} -o ControlMaster=auto -o ControlPath=${CTRL_SOCK} -o ControlPersist=60"
 
-cleanup() { ssh -o ControlPath="${CTRL_SOCK}" -O exit "${SSH_TARGET}" 2>/dev/null || true; }
+# Set up SSH_ASKPASS so the stored password is fed to SSH automatically
+ASKPASS_HELPER=$(mktemp "${TMPDIR:-/tmp}/deck-askpass.XXXXXX")
+chmod 700 "${ASKPASS_HELPER}"
+printf '#!/bin/sh\nprintf "%%s\\n" "$DECK_PASS"\n' > "${ASKPASS_HELPER}"
+export SSH_ASKPASS="${ASKPASS_HELPER}"
+export SSH_ASKPASS_REQUIRE=force
+export DECK_PASS
+
+cleanup() {
+  unset DECK_PASS
+  ssh -o ControlPath="${CTRL_SOCK}" -O exit "${SSH_TARGET}" 2>/dev/null || true
+  rm -f "${ASKPASS_HELPER}"
+}
 trap cleanup EXIT
 
 # Authenticate once — all subsequent ssh/rsync reuse this connection
@@ -44,8 +56,9 @@ echo "Deploying '${PLUGIN_NAME}'..."
 # Upload to /tmp (no permissions needed), then sudo move into plugins dir
 rsync -azp --rsh="ssh ${SSH_OPTS}" out/ "${SSH_TARGET}:/tmp/decky-deploy/"
 
-ssh ${SSH_OPTS} "${SSH_TARGET}" "
-  echo '${DECK_PASS}' | sudo -S bash -c '
+# Pipe password via stdin to avoid it appearing in process listings or command strings
+printf '%s\n' "${DECK_PASS}" | ssh ${SSH_OPTS} "${SSH_TARGET}" "
+  sudo -S bash -c '
     mkdir -p \"${PLUGINS_DIR}/${SAFE_NAME}\" &&
     bsdtar -xzpf \"/tmp/decky-deploy/${PLUGIN_NAME}.zip\" \
       -C \"${PLUGINS_DIR}/${SAFE_NAME}\" --strip-components=1 --fflags &&
