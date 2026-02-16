@@ -24,6 +24,7 @@ describe('util constants and enums', () => {
     expect(ViewMode.Expand).toBe(1);
     expect(ViewMode.Picture).toBe(2);
     expect(ViewMode.Closed).toBe(3);
+    expect(ViewMode.Minimised).toBe(4);
   });
 
   it('keeps Position enum values stable', () => {

@@ -7,6 +7,7 @@ export enum ViewMode {
   Expand = 1,
   Picture = 2,
   Closed = 3,
+  Minimised = 4,
 }
 
 export enum Position {

@@ -22,7 +22,10 @@ export const Settings = () => {
     setGlobalState((state) => ({
       ...state,
       visible: true,
-      viewMode: state.viewMode === ViewMode.Closed ? ViewMode.Picture : state.viewMode,
+      viewMode:
+        state.viewMode === ViewMode.Closed || state.viewMode === ViewMode.Minimised
+          ? ViewMode.Picture
+          : state.viewMode,
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -84,6 +84,31 @@ describe('PortalView and PortalViewOuter', () => {
     expect(createBrowserView).toHaveBeenCalledTimes(1);
   });
 
+  it('creates browser view when minimised (keeps it alive)', () => {
+    vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Minimised)] as never);
+
+    render(<PortalViewOuter />);
+
+    expect(createBrowserView).toHaveBeenCalledTimes(1);
+  });
+
+  it('sets bounds to 0x0 and hides browser when minimised', async () => {
+    vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Minimised)] as never);
+
+    render(<PortalView />);
+
+    await waitFor(() => {
+      expect(setBounds).toHaveBeenCalled();
+    });
+
+    const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
+    expect(x).toBe(0);
+    expect(y).toBe(0);
+    expect(width).toBe(0);
+    expect(height).toBe(0);
+    expect(setVisible).toHaveBeenCalledWith(false);
+  });
+
   it('renders gracefully when decky main window instance is unavailable', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 

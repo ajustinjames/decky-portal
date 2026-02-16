@@ -257,6 +257,11 @@ export const PortalView = () => {
       }
       break;
 
+    case ViewMode.Minimised:
+      return (
+        <Browser url={url} visible={false} x={0} y={0} width={0} height={0} />
+      );
+
     case ViewMode.Picture:
       {
         switch (position) {

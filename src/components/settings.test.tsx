@@ -160,6 +160,34 @@ describe('Settings', () => {
     expect(state.viewMode).toBe(ViewMode.Closed);
   });
 
+  it('auto-restores from minimised to picture when opening settings', () => {
+    let state = createState(ViewMode.Minimised);
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    // The useEffect auto-open should have been called, restoring to Picture
+    expect(setGlobalState).toHaveBeenCalled();
+    const updater = setGlobalState.mock.calls[0][0] as (s: typeof state) => typeof state;
+    const result = updater(createState(ViewMode.Minimised));
+    expect(result.viewMode).toBe(ViewMode.Picture);
+  });
+
+  it('shows close button when minimised', () => {
+    const state = createState(ViewMode.Minimised);
+    const setGlobalState = vi.fn();
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    expect(screen.getByText('Close')).toBeTruthy();
+  });
+
   it('updates view position and slider values in picture mode', () => {
     let state = createState(ViewMode.Picture);
     const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
