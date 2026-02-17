@@ -24,6 +24,7 @@ const createMockState = (previousViewMode = ViewMode.Picture) => {
     margin: 20,
     size: 1,
     url: 'https://example.com',
+    controlBar: true,
   };
 
   const setState = vi.fn((updater: (s: typeof state) => typeof state) => {

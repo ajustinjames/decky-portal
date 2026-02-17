@@ -12,6 +12,7 @@ export interface State {
   margin: number;
   size: number;
   url: string;
+  controlBar: boolean;
 }
 
 export const GlobalContext = createContext(new StateManager<State>({} as State));

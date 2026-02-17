@@ -27,6 +27,9 @@ export default [
                 localStorage: 'readonly',
                 setInterval: 'readonly',
                 clearInterval: 'readonly',
+                setTimeout: 'readonly',
+                clearTimeout: 'readonly',
+                HTMLInputElement: 'readonly',
             },
         },
         plugins: {

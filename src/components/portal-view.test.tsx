@@ -51,6 +51,7 @@ const createState = (viewMode: ViewMode, position = Position.TopRight, margin = 
   margin,
   size: 1,
   url: 'https://netflix.com',
+  controlBar: true,
 });
 
 // BAR_WIDTH = 48
@@ -321,6 +322,25 @@ describe('PortalView and PortalViewOuter', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('hides control bar and gives full width when controlBar is false', async () => {
+    const state = createState(ViewMode.Picture);
+    state.controlBar = false;
+    vi.mocked(useGlobalState).mockReturnValue([state] as never);
+
+    const { container } = render(<PortalView />);
+
+    expect(container.querySelector('[data-testid="control-bar"]')).toBeNull();
+
+    await waitFor(() => {
+      expect(setBounds).toHaveBeenCalled();
+    });
+
+    // Without bar: browserX = bounds.x (no offset), browserWidth = full pictureWidth (341.6)
+    const [x, _y, width] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
+    expect(x).toBeCloseTo(492.4, 3);
+    expect(width).toBeCloseTo(341.6, 3);
   });
 
   it('keeps same bounds when polling returns equal non-null rectangles', () => {

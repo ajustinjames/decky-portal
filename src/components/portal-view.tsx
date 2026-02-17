@@ -320,6 +320,8 @@ export const PortalView = () => {
       break;
   }
 
+  const showControlBar = settings.controlBar;
+
   const barOnLeft =
     viewMode === ViewMode.Picture &&
     (position === Position.TopRight ||
@@ -329,8 +331,8 @@ export const PortalView = () => {
   const barSide = barOnLeft ? 'left' : 'right';
 
   const barX = barOnLeft ? bounds.x : bounds.x + bounds.width - BAR_WIDTH;
-  const browserX = barOnLeft ? bounds.x + BAR_WIDTH : bounds.x;
-  const browserWidth = bounds.width - BAR_WIDTH;
+  const browserX = showControlBar && barOnLeft ? bounds.x + BAR_WIDTH : bounds.x;
+  const browserWidth = showControlBar ? bounds.width - BAR_WIDTH : bounds.width;
 
   return (
     <>
@@ -342,7 +344,7 @@ export const PortalView = () => {
         width={browserWidth}
         height={bounds.height}
       />
-      {visible && (
+      {visible && showControlBar && (
         <ControlBar
           x={barX}
           y={bounds.y}

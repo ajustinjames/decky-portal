@@ -15,7 +15,7 @@ import { useGlobalState } from '../hooks/global-state';
 import { UrlModalWithState } from './url-modal';
 
 export const Settings = () => {
-  const [{ viewMode, position, margin, url, size }, setGlobalState, stateContext] =
+  const [{ viewMode, position, margin, url, size, controlBar }, setGlobalState, stateContext] =
     useGlobalState();
 
   const isMinimised = viewMode === ViewMode.Minimised;
@@ -93,6 +93,20 @@ export const Settings = () => {
                 }}
               />
             </PanelSectionRow>
+            {!isMinimised && (
+              <PanelSectionRow>
+                <ToggleField
+                  label="Control Bar"
+                  checked={controlBar}
+                  onChange={(checked) => {
+                    setGlobalState((state) => ({
+                      ...state,
+                      controlBar: checked,
+                    }));
+                  }}
+                />
+              </PanelSectionRow>
+            )}
           </>
         )}
         {showPipControls && (

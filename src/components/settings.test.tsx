@@ -126,6 +126,7 @@ const createState = (viewMode: ViewMode) => ({
   margin: 30,
   size: 1,
   url: 'https://netflix.com',
+  controlBar: true,
 });
 
 describe('Settings', () => {
@@ -265,6 +266,35 @@ describe('Settings', () => {
     fireEvent.change(screen.getByLabelText('Margin'), { target: { value: '45' } });
     expect(state.margin).toBe(45);
     expect(state.viewMode).toBe(ViewMode.Minimised);
+  });
+
+  it('shows Control Bar toggle in picture mode', () => {
+    let state = createState(ViewMode.Picture);
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    const toggle = screen.getByLabelText<HTMLInputElement>('Control Bar');
+    expect(toggle).toBeTruthy();
+    expect(toggle.checked).toBe(true);
+
+    fireEvent.click(toggle);
+    expect(state.controlBar).toBe(false);
+  });
+
+  it('hides Control Bar toggle when minimised', () => {
+    const state = createState(ViewMode.Minimised);
+    const setGlobalState = vi.fn();
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    expect(screen.queryByLabelText('Control Bar')).toBeNull();
   });
 
   it('updates view position and slider values in picture mode', () => {

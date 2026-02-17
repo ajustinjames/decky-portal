@@ -18,6 +18,7 @@ export default definePlugin(() => {
     margin: 30,
     size: 1,
     url: 'https://netflix.com',
+    controlBar: true,
   };
 
   const state = new StateManager<State>({

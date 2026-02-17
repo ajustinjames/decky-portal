@@ -3,10 +3,15 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { ControlBar } from './control-bar';
 import { useGlobalState } from '../hooks/global-state';
+import { useAutoHide } from '../hooks/use-auto-hide';
 import { ViewMode } from '../lib/util';
 
 vi.mock('../hooks/global-state', () => ({
   useGlobalState: vi.fn(),
+}));
+
+vi.mock('../hooks/use-auto-hide', () => ({
+  useAutoHide: vi.fn(),
 }));
 
 vi.mock('react-icons/fa', () => ({
@@ -26,6 +31,7 @@ const createMockState = (viewMode: ViewMode, size = 1.0) => {
     margin: 20,
     size,
     url: 'https://example.com',
+    controlBar: true,
   };
 
   const setState = vi.fn((updater: (s: typeof state) => typeof state) => {
@@ -35,9 +41,17 @@ const createMockState = (viewMode: ViewMode, size = 1.0) => {
   return { state, setState, getState: () => state };
 };
 
+const createMockAutoHide = (expanded = true) => {
+  const show = vi.fn();
+  const onInteraction = vi.fn();
+  vi.mocked(useAutoHide).mockReturnValue({ expanded, show, onInteraction });
+  return { show, onInteraction };
+};
+
 describe('ControlBar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    createMockAutoHide(true);
   });
 
   it('renders in Picture mode', () => {
@@ -209,5 +223,81 @@ describe('ControlBar', () => {
 
     const backdrop = screen.getByTestId('control-bar-backdrop');
     expect(backdrop.style.flexDirection).toBe('column');
+  });
+
+  describe('auto-hide', () => {
+    it('renders collapsed line when not expanded', () => {
+      createMockAutoHide(false);
+      const { state, setState } = createMockState(ViewMode.Picture);
+      vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
+
+      render(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
+      );
+
+      expect(screen.getByTestId('control-bar-collapsed')).toBeTruthy();
+      expect(screen.queryByTestId('control-bar-backdrop')).toBeNull();
+    });
+
+    it('collapsed line has correct dimensions (40% of height)', () => {
+      createMockAutoHide(false);
+      const { state, setState } = createMockState(ViewMode.Picture);
+      vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
+
+      render(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
+      );
+
+      const collapsed = screen.getByTestId('control-bar-collapsed');
+      expect(collapsed.style.height).toBe('120px');
+      expect(collapsed.style.width).toBe('5px');
+    });
+
+    it('tapping collapsed area calls show()', () => {
+      const { show } = createMockAutoHide(false);
+      const { state, setState } = createMockState(ViewMode.Picture);
+      vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
+
+      render(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
+      );
+
+      fireEvent.click(screen.getByTestId('control-bar'));
+      expect(show).toHaveBeenCalledTimes(1);
+    });
+
+    it('button clicks call onInteraction()', () => {
+      const { onInteraction } = createMockAutoHide(true);
+      const mock = createMockState(ViewMode.Picture);
+      vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
+
+      render(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
+      );
+
+      fireEvent.click(screen.getByLabelText('Expand'));
+      expect(onInteraction).toHaveBeenCalledTimes(1);
+
+      fireEvent.click(screen.getByLabelText('Cycle Size'));
+      expect(onInteraction).toHaveBeenCalledTimes(2);
+    });
+
+    it('calls show() when viewMode changes', () => {
+      const { show } = createMockAutoHide(true);
+      const { state, setState } = createMockState(ViewMode.Picture);
+      vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
+
+      const { rerender } = render(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
+      );
+
+      expect(show).not.toHaveBeenCalled();
+
+      rerender(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Expand} />,
+      );
+
+      expect(show).toHaveBeenCalledTimes(1);
+    });
   });
 });

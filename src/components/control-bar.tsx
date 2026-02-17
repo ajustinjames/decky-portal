@@ -1,6 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { FaCompress, FaExpand, FaSearchPlus, FaTimes, FaWindowMinimize } from 'react-icons/fa';
 
 import { useGlobalState } from '../hooks/global-state';
+import { useAutoHide } from '../hooks/use-auto-hide';
 import { ViewMode } from '../lib/util';
 
 const SIZE_STEPS = [0.7, 1.0, 1.3];
@@ -15,9 +17,24 @@ interface ControlBarProps {
 
 export const BAR_WIDTH = 48;
 const BUTTON_SIZE = 44;
+const COLLAPSED_LINE_WIDTH = 5;
 
 export const ControlBar = ({ x, y, height, side: _side, viewMode }: ControlBarProps) => {
   const [{ size }, setState] = useGlobalState();
+  const { expanded, show, onInteraction } = useAutoHide();
+  const prevViewModeRef = useRef(viewMode);
+
+  useEffect(() => {
+    if (prevViewModeRef.current !== viewMode) {
+      prevViewModeRef.current = viewMode;
+      show();
+    }
+  }, [viewMode, show]);
+
+  const withInteraction = (handler: () => void) => () => {
+    onInteraction();
+    handler();
+  };
 
   const toggleExpand = () => {
     setState((s) => ({
@@ -65,6 +82,8 @@ export const ControlBar = ({ x, y, height, side: _side, viewMode }: ControlBarPr
     padding: 0,
   };
 
+  const collapsedLineHeight = Math.round(height * 0.4);
+
   return (
     <div
       data-testid="control-bar"
@@ -77,40 +96,71 @@ export const ControlBar = ({ x, y, height, side: _side, viewMode }: ControlBarPr
         height,
         display: 'flex',
         flexDirection: 'column',
+        cursor: expanded ? undefined : 'pointer',
       }}
+      onClick={expanded ? undefined : show}
     >
-      <div
-        data-testid="control-bar-backdrop"
-        style={{
-          background: 'rgba(40, 40, 40, 0.6)',
-          borderRadius: BAR_WIDTH / 2,
-          flex: '0 1 auto',
-          minHeight: 0,
-          boxSizing: 'border-box',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 4,
-          padding: `${BAR_WIDTH / 2}px 0`,
-        }}
-      >
-        {viewMode === ViewMode.Picture && (
-          <button aria-label="Cycle Size" style={buttonStyle} onClick={cycleSize}>
-            <FaSearchPlus />
+      {expanded ? (
+        <div
+          data-testid="control-bar-backdrop"
+          style={{
+            background: 'rgba(40, 40, 40, 0.6)',
+            borderRadius: BAR_WIDTH / 2,
+            flex: '0 1 auto',
+            minHeight: 0,
+            boxSizing: 'border-box',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 4,
+            padding: `${BAR_WIDTH / 2}px 0`,
+            transition: 'opacity 200ms ease',
+            opacity: 1,
+          }}
+        >
+          {viewMode === ViewMode.Picture && (
+            <button
+              aria-label="Cycle Size"
+              style={buttonStyle}
+              onClick={withInteraction(cycleSize)}
+            >
+              <FaSearchPlus />
+            </button>
+          )}
+          <button
+            aria-label="Expand"
+            style={buttonStyle}
+            onClick={withInteraction(toggleExpand)}
+          >
+            {viewMode === ViewMode.Picture ? <FaExpand /> : <FaCompress />}
           </button>
-        )}
-        <button aria-label="Expand" style={buttonStyle} onClick={toggleExpand}>
-          {viewMode === ViewMode.Picture ? <FaExpand /> : <FaCompress />}
-        </button>
-        <button aria-label="Minimise" style={buttonStyle} onClick={minimise}>
-          <FaWindowMinimize />
-        </button>
-        <button aria-label="Close" style={buttonStyle} onClick={close}>
-          <FaTimes />
-        </button>
-      </div>
+          <button
+            aria-label="Minimise"
+            style={buttonStyle}
+            onClick={withInteraction(minimise)}
+          >
+            <FaWindowMinimize />
+          </button>
+          <button aria-label="Close" style={buttonStyle} onClick={withInteraction(close)}>
+            <FaTimes />
+          </button>
+        </div>
+      ) : (
+        <div
+          data-testid="control-bar-collapsed"
+          style={{
+            width: COLLAPSED_LINE_WIDTH,
+            height: collapsedLineHeight,
+            background: 'rgba(40, 40, 40, 0.6)',
+            borderRadius: COLLAPSED_LINE_WIDTH / 2,
+            margin: 'auto',
+            transition: 'opacity 200ms ease',
+            opacity: 1,
+          }}
+        />
+      )}
     </div>
   );
 };

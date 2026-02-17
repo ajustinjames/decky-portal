@@ -38,6 +38,7 @@ const createState = () => ({
   margin: 30,
   size: 1,
   url: 'https://netflix.com',
+  controlBar: true,
 });
 
 describe('UrlModal', () => {
