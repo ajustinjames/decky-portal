@@ -35,10 +35,14 @@ vi.mock('@decky/ui', () => ({
   ToggleField: ({
     label,
     checked,
+    disabled,
+    description,
     onChange,
   }: {
     label: string;
     checked: boolean;
+    disabled?: boolean;
+    description?: string;
     onChange: (val: boolean) => void;
   }) => (
     <label>
@@ -47,8 +51,10 @@ vi.mock('@decky/ui', () => ({
         aria-label={label}
         type="checkbox"
         checked={checked}
+        disabled={disabled}
         onChange={(e) => onChange(e.currentTarget.checked)}
       />
+      {description && <span data-testid="toggle-description">{description}</span>}
     </label>
   ),
   DropdownItem: ({
@@ -161,7 +167,7 @@ describe('Settings', () => {
     expect(state.viewMode).toBe(ViewMode.Closed);
   });
 
-  it('auto-restores from minimised to picture when opening settings', () => {
+  it('preserves minimised state when opening settings', () => {
     let state = createState(ViewMode.Minimised);
     const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
       state = updater(state);
@@ -171,11 +177,29 @@ describe('Settings', () => {
 
     render(<Settings />);
 
-    // The useEffect auto-open should have been called, restoring to Picture
+    // The useEffect should make visible but NOT change viewMode from Minimised
     expect(setGlobalState).toHaveBeenCalled();
     const updater = setGlobalState.mock.calls[0][0] as (s: typeof state) => typeof state;
     const result = updater(createState(ViewMode.Minimised));
+    expect(result.viewMode).toBe(ViewMode.Minimised);
+    expect(result.visible).toBe(true);
+  });
+
+  it('auto-restores from closed to picture when opening settings', () => {
+    let state = createState(ViewMode.Closed);
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    expect(setGlobalState).toHaveBeenCalled();
+    const updater = setGlobalState.mock.calls[0][0] as (s: typeof state) => typeof state;
+    const result = updater(createState(ViewMode.Closed));
     expect(result.viewMode).toBe(ViewMode.Picture);
+    expect(result.visible).toBe(true);
   });
 
   it('shows close button when minimised', () => {
@@ -187,6 +211,60 @@ describe('Settings', () => {
     render(<Settings />);
 
     expect(screen.getByText('Close')).toBeTruthy();
+  });
+
+  it('shows pip controls with minimised warning when minimised', () => {
+    const state = createState(ViewMode.Minimised);
+    const setGlobalState = vi.fn();
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    expect(screen.getByText(/Portal is minimised/)).toBeTruthy();
+    expect(screen.getByLabelText('View')).toBeTruthy();
+    expect(screen.getByLabelText('Size')).toBeTruthy();
+    expect(screen.getByLabelText('Margin')).toBeTruthy();
+  });
+
+  it('disables expand toggle when minimised', () => {
+    const state = createState(ViewMode.Minimised);
+    const setGlobalState = vi.fn();
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    const expandToggle = screen.getByLabelText<HTMLInputElement>('Expand');
+    expect(expandToggle.disabled).toBe(true);
+    expect(screen.getByTestId('toggle-description').textContent).toBe(
+      'Unavailable while minimised',
+    );
+  });
+
+  it('allows editing pip settings while minimised without changing viewMode', () => {
+    let state = createState(ViewMode.Minimised);
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState, {}] as never);
+
+    render(<Settings />);
+
+    fireEvent.change(screen.getByLabelText('View'), {
+      target: { value: String(Position.Bottom) },
+    });
+    expect(state.position).toBe(Position.Bottom);
+    expect(state.viewMode).toBe(ViewMode.Minimised);
+
+    fireEvent.change(screen.getByLabelText('Size'), { target: { value: '1.3' } });
+    expect(state.size).toBe(1.3);
+    expect(state.viewMode).toBe(ViewMode.Minimised);
+
+    fireEvent.change(screen.getByLabelText('Margin'), { target: { value: '45' } });
+    expect(state.margin).toBe(45);
+    expect(state.viewMode).toBe(ViewMode.Minimised);
   });
 
   it('updates view position and slider values in picture mode', () => {

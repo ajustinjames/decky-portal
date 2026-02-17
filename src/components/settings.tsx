@@ -18,14 +18,14 @@ export const Settings = () => {
   const [{ viewMode, position, margin, url, size }, setGlobalState, stateContext] =
     useGlobalState();
 
+  const isMinimised = viewMode === ViewMode.Minimised;
+  const showPipControls = viewMode === ViewMode.Picture || isMinimised;
+
   useEffect(() => {
     setGlobalState((state) => ({
       ...state,
       visible: true,
-      viewMode:
-        state.viewMode === ViewMode.Closed || state.viewMode === ViewMode.Minimised
-          ? ViewMode.Picture
-          : state.viewMode,
+      viewMode: state.viewMode === ViewMode.Closed ? ViewMode.Picture : state.viewMode,
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -82,6 +82,8 @@ export const Settings = () => {
             <PanelSectionRow>
               <ToggleField
                 label="Expand"
+                disabled={isMinimised}
+                description={isMinimised ? 'Unavailable while minimised' : undefined}
                 checked={viewMode === ViewMode.Expand}
                 onChange={(checked) => {
                   setGlobalState((state) => ({
@@ -93,8 +95,15 @@ export const Settings = () => {
             </PanelSectionRow>
           </>
         )}
-        {viewMode === ViewMode.Picture && (
+        {showPipControls && (
           <>
+            {isMinimised && (
+              <PanelSectionRow>
+                <div style={{ fontSize: 12, opacity: 0.6, padding: '0 0 8px' }}>
+                  Portal is minimised. Changes apply when restored.
+                </div>
+              </PanelSectionRow>
+            )}
             <PanelSectionRow>
               <DropdownItem
                 label="View"
@@ -111,7 +120,6 @@ export const Settings = () => {
                     ...state,
                     visible: true,
                     position: option.data,
-                    viewMode: ViewMode.Picture,
                   }))
                 }
               />
@@ -125,7 +133,6 @@ export const Settings = () => {
                     ...state,
                     size,
                     visible: true,
-                    viewMode: ViewMode.Picture,
                   }))
                 }
                 min={0.7}
@@ -149,7 +156,6 @@ export const Settings = () => {
                     ...state,
                     margin,
                     visible: true,
-                    viewMode: ViewMode.Picture,
                   }))
                 }
                 min={0}
