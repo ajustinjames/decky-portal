@@ -239,18 +239,37 @@ describe('ControlBar', () => {
       expect(screen.queryByTestId('control-bar-backdrop')).toBeNull();
     });
 
-    it('collapsed line has correct dimensions (40% of height)', () => {
+    it('collapsed state has shrunk tap target and correct line dimensions', () => {
       createMockAutoHide(false);
       const { state, setState } = createMockState(ViewMode.Picture);
       vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
       render(
-        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
+        <ControlBar x={100} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
       );
+
+      const bar = screen.getByTestId('control-bar');
+      expect(bar.style.width).toBe('16px');
+      expect(bar.style.left).toBe('100px');
 
       const collapsed = screen.getByTestId('control-bar-collapsed');
       expect(collapsed.style.height).toBe('120px');
       expect(collapsed.style.width).toBe('5px');
+    });
+
+    it('offsets collapsed tap target toward PiP when bar is on left', () => {
+      createMockAutoHide(false);
+      const { state, setState } = createMockState(ViewMode.Picture);
+      vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
+
+      render(
+        <ControlBar x={100} y={0} height={300} side="left" viewMode={ViewMode.Picture} />,
+      );
+
+      const bar = screen.getByTestId('control-bar');
+      // x + BAR_WIDTH - COLLAPSED_TAP_WIDTH = 100 + 48 - 16 = 132
+      expect(bar.style.left).toBe('132px');
+      expect(bar.style.width).toBe('16px');
     });
 
     it('tapping collapsed area calls show()', () => {

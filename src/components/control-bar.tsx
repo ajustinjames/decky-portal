@@ -18,8 +18,9 @@ interface ControlBarProps {
 export const BAR_WIDTH = 48;
 const BUTTON_SIZE = 44;
 const COLLAPSED_LINE_WIDTH = 5;
+const COLLAPSED_TAP_WIDTH = 16;
 
-export const ControlBar = ({ x, y, height, side: _side, viewMode }: ControlBarProps) => {
+export const ControlBar = ({ x, y, height, side, viewMode }: ControlBarProps) => {
   const [{ size }, setState] = useGlobalState();
   const { expanded, show, onInteraction } = useAutoHide();
   const prevViewModeRef = useRef(viewMode);
@@ -84,15 +85,20 @@ export const ControlBar = ({ x, y, height, side: _side, viewMode }: ControlBarPr
 
   const collapsedLineHeight = Math.round(height * 0.4);
 
+  // When collapsed, shrink touch area and offset toward the PiP edge.
+  // side='right' means bar is right of PiP → hug left edge (closest to PiP).
+  // side='left' means bar is left of PiP → hug right edge (closest to PiP).
+  const collapsedX = side === 'left' ? x + BAR_WIDTH - COLLAPSED_TAP_WIDTH : x;
+
   return (
     <div
       data-testid="control-bar"
       style={{
         position: 'absolute',
         zIndex: 7001,
-        left: x,
+        left: expanded ? x : collapsedX,
         top: y,
-        width: BAR_WIDTH,
+        width: expanded ? BAR_WIDTH : COLLAPSED_TAP_WIDTH,
         height,
         display: 'flex',
         flexDirection: 'column',
