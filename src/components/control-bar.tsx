@@ -139,18 +139,10 @@ export const ControlBar = ({ x, y, height, side, viewMode }: ControlBarProps) =>
               <FaSearchPlus />
             </button>
           )}
-          <button
-            aria-label="Expand"
-            style={buttonStyle}
-            onClick={withInteraction(toggleExpand)}
-          >
+          <button aria-label="Expand" style={buttonStyle} onClick={withInteraction(toggleExpand)}>
             {viewMode === ViewMode.Picture ? <FaExpand /> : <FaCompress />}
           </button>
-          <button
-            aria-label="Minimise"
-            style={buttonStyle}
-            onClick={withInteraction(minimise)}
-          >
+          <button aria-label="Minimise" style={buttonStyle} onClick={withInteraction(minimise)}>
             <FaWindowMinimize />
           </button>
           <button aria-label="Close" style={buttonStyle} onClick={withInteraction(close)}>

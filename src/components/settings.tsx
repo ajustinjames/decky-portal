@@ -27,7 +27,7 @@ export const Settings = () => {
       visible: true,
       viewMode: state.viewMode === ViewMode.Closed ? ViewMode.Picture : state.viewMode,
     }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const positionOptions = [

@@ -58,9 +58,7 @@ describe('ControlBar', () => {
     const { state, setState } = createMockState(ViewMode.Picture);
     vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-    render(
-      <ControlBar x={100} y={200} height={300} side="right" viewMode={ViewMode.Picture} />,
-    );
+    render(<ControlBar x={100} y={200} height={300} side="right" viewMode={ViewMode.Picture} />);
 
     expect(screen.getByTestId('control-bar')).toBeTruthy();
   });
@@ -69,9 +67,7 @@ describe('ControlBar', () => {
     const { state, setState } = createMockState(ViewMode.Expand);
     vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={30} height={474} side="right" viewMode={ViewMode.Expand} />,
-    );
+    render(<ControlBar x={0} y={30} height={474} side="right" viewMode={ViewMode.Expand} />);
 
     expect(screen.getByTestId('control-bar')).toBeTruthy();
   });
@@ -93,9 +89,7 @@ describe('ControlBar', () => {
       {},
     ] as never);
 
-    rerender(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />,
-    );
+    rerender(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />);
 
     expect(screen.queryByLabelText('Cycle Size')).toBeNull();
   });
@@ -118,9 +112,7 @@ describe('ControlBar', () => {
       {},
     ] as never);
 
-    rerender(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />,
-    );
+    rerender(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />);
 
     expect(screen.getByTestId('icon-compress')).toBeTruthy();
     expect(screen.queryByTestId('icon-expand')).toBeNull();
@@ -130,9 +122,7 @@ describe('ControlBar', () => {
     const mock = createMockState(ViewMode.Picture);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />,
-    );
+    render(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />);
 
     fireEvent.click(screen.getByLabelText('Expand'));
     expect(mock.setState).toHaveBeenCalledTimes(1);
@@ -143,9 +133,7 @@ describe('ControlBar', () => {
     const mock = createMockState(ViewMode.Expand);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />,
-    );
+    render(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />);
 
     fireEvent.click(screen.getByLabelText('Expand'));
     expect(mock.getState().viewMode).toBe(ViewMode.Picture);
@@ -155,9 +143,7 @@ describe('ControlBar', () => {
     const mock = createMockState(ViewMode.Picture);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />,
-    );
+    render(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />);
 
     fireEvent.click(screen.getByLabelText('Minimise'));
     expect(mock.getState().viewMode).toBe(ViewMode.Minimised);
@@ -169,9 +155,7 @@ describe('ControlBar', () => {
     const mock = createMockState(ViewMode.Expand);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />,
-    );
+    render(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Expand} />);
 
     fireEvent.click(screen.getByLabelText('Minimise'));
     expect(mock.getState().viewMode).toBe(ViewMode.Minimised);
@@ -182,9 +166,7 @@ describe('ControlBar', () => {
     const mock = createMockState(ViewMode.Picture);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />,
-    );
+    render(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />);
 
     fireEvent.click(screen.getByLabelText('Close'));
     expect(mock.getState().viewMode).toBe(ViewMode.Closed);
@@ -199,9 +181,7 @@ describe('ControlBar', () => {
     const mock = createMockState(ViewMode.Picture, currentSize);
     vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-    render(
-      <ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />,
-    );
+    render(<ControlBar x={0} y={100} height={300} side="right" viewMode={ViewMode.Picture} />);
 
     fireEvent.click(screen.getByLabelText('Cycle Size'));
     expect(mock.getState().size).toBe(expectedSize);
@@ -211,9 +191,7 @@ describe('ControlBar', () => {
     const { state, setState } = createMockState(ViewMode.Picture);
     vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-    render(
-      <ControlBar x={150} y={250} height={400} side="left" viewMode={ViewMode.Picture} />,
-    );
+    render(<ControlBar x={150} y={250} height={400} side="left" viewMode={ViewMode.Picture} />);
 
     const bar = screen.getByTestId('control-bar');
     expect(bar.style.left).toBe('150px');
@@ -231,9 +209,7 @@ describe('ControlBar', () => {
       const { state, setState } = createMockState(ViewMode.Picture);
       vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-      render(
-        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
-      );
+      render(<ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />);
 
       expect(screen.getByTestId('control-bar-collapsed')).toBeTruthy();
       expect(screen.queryByTestId('control-bar-backdrop')).toBeNull();
@@ -244,9 +220,7 @@ describe('ControlBar', () => {
       const { state, setState } = createMockState(ViewMode.Picture);
       vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-      render(
-        <ControlBar x={100} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
-      );
+      render(<ControlBar x={100} y={0} height={300} side="right" viewMode={ViewMode.Picture} />);
 
       const bar = screen.getByTestId('control-bar');
       expect(bar.style.width).toBe('16px');
@@ -262,9 +236,7 @@ describe('ControlBar', () => {
       const { state, setState } = createMockState(ViewMode.Picture);
       vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-      render(
-        <ControlBar x={100} y={0} height={300} side="left" viewMode={ViewMode.Picture} />,
-      );
+      render(<ControlBar x={100} y={0} height={300} side="left" viewMode={ViewMode.Picture} />);
 
       const bar = screen.getByTestId('control-bar');
       // x + BAR_WIDTH - COLLAPSED_TAP_WIDTH = 100 + 48 - 16 = 132
@@ -277,9 +249,7 @@ describe('ControlBar', () => {
       const { state, setState } = createMockState(ViewMode.Picture);
       vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-      render(
-        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
-      );
+      render(<ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />);
 
       fireEvent.click(screen.getByTestId('control-bar'));
       expect(show).toHaveBeenCalledTimes(1);
@@ -290,9 +260,7 @@ describe('ControlBar', () => {
       const mock = createMockState(ViewMode.Picture);
       vi.mocked(useGlobalState).mockReturnValue([mock.state, mock.setState, {}] as never);
 
-      render(
-        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />,
-      );
+      render(<ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Picture} />);
 
       fireEvent.click(screen.getByLabelText('Expand'));
       expect(onInteraction).toHaveBeenCalledTimes(1);
@@ -306,9 +274,7 @@ describe('ControlBar', () => {
       const { state, setState } = createMockState(ViewMode.Expand);
       vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
 
-      render(
-        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Expand} />,
-      );
+      render(<ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Expand} />);
 
       expect(screen.getByTestId('control-bar-backdrop')).toBeTruthy();
       expect(screen.queryByTestId('control-bar-collapsed')).toBeNull();
@@ -325,9 +291,7 @@ describe('ControlBar', () => {
 
       expect(show).not.toHaveBeenCalled();
 
-      rerender(
-        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Expand} />,
-      );
+      rerender(<ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Expand} />);
 
       expect(show).toHaveBeenCalledTimes(1);
     });
