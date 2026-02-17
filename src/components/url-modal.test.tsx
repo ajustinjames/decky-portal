@@ -79,6 +79,21 @@ describe('UrlModal', () => {
     expect(state.visible).toBe(true);
   });
 
+  it('does not cause infinite loop from unstable setGlobalState reference', () => {
+    let state = createState();
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState] as never);
+
+    render(<UrlModal closeModal={() => {}} />);
+
+    // Should be called exactly once on mount (visible: false), not repeatedly
+    expect(setGlobalState).toHaveBeenCalledTimes(1);
+    expect(state.visible).toBe(false);
+  });
+
   it('restores visibility when cancelled', () => {
     let state = createState();
     const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {

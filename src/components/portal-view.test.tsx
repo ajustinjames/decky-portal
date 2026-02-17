@@ -252,6 +252,24 @@ describe('PortalView and PortalViewOuter', () => {
     expect(height).toBeCloseTo(184.6486, 3);
   });
 
+  it('hides control bar when visible is false', () => {
+    const state = createState(ViewMode.Picture);
+    state.visible = false;
+    vi.mocked(useGlobalState).mockReturnValue([state] as never);
+
+    const { container } = render(<PortalView />);
+
+    expect(container.querySelector('[data-testid="control-bar"]')).toBeNull();
+  });
+
+  it('shows control bar when visible is true', () => {
+    vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
+
+    const { container } = render(<PortalView />);
+
+    expect(container.querySelector('[data-testid="control-bar"]')).toBeTruthy();
+  });
+
   it('updates deck component bounds only when interval polling detects changes', async () => {
     vi.useFakeTimers();
 

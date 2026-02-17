@@ -19,7 +19,8 @@ export const UrlModal = (props: ModalRootProps) => {
         ...state,
         visible: true,
       }));
-  }, [setGlobalState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ConfirmModal

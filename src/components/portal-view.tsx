@@ -342,13 +342,15 @@ export const PortalView = () => {
         width={browserWidth}
         height={bounds.height}
       />
-      <ControlBar
-        x={barX}
-        y={bounds.y}
-        height={bounds.height}
-        side={barSide}
-        viewMode={viewMode}
-      />
+      {visible && (
+        <ControlBar
+          x={barX}
+          y={bounds.y}
+          height={bounds.height}
+          side={barSide}
+          viewMode={viewMode}
+        />
+      )}
     </>
   );
 };
