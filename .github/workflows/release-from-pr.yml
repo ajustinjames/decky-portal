@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  tag:
+  release:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -30,7 +30,7 @@ jobs:
             else if (labels.includes('semver:patch')) bump = 'patch';
 
             if (!bump) {
-              core.notice('No semver label found (semver:major|minor|patch). Skipping tag creation.');
+              core.notice('No semver label found (semver:major|minor|patch). Skipping release.');
               core.setOutput('created', 'false');
               return;
             }
@@ -63,27 +63,41 @@ jobs:
             }
 
             const tag = `v${major}.${minor}.${patch}`;
-            const ref = `refs/tags/${tag}`;
-            const sha = pr.merge_commit_sha || pr.head.sha;
-
-            try {
-              await github.rest.git.createRef({ owner, repo, ref, sha });
-            } catch (error) {
-              if (error.status === 422) {
-                core.setFailed(`Tag ${tag} already exists.`);
-                return;
-              }
-              throw error;
-            }
-
-            core.notice(`Created tag ${tag} from merged PR #${pr.number}.`);
+            core.notice(`Will release ${tag} from merged PR #${pr.number}.`);
             core.setOutput('created', 'true');
             core.setOutput('tag', tag);
 
-      - name: Release summary
+      - name: Checkout code
+        if: steps.semver.outputs.created == 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: steps.semver.outputs.created == 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        if: steps.semver.outputs.created == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        if: steps.semver.outputs.created == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build plugin zip
+        if: steps.semver.outputs.created == 'true'
+        run: pnpm deck:build
+
+      - name: Create tag and GitHub release
         if: steps.semver.outputs.created == 'true'
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.semver.outputs.tag }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          echo "Created ${TAG} from PR #${PR_NUMBER}"
+          git tag "${TAG}"
+          git push origin "${TAG}"
+          gh release create "${TAG}" out/*.zip --generate-notes --title "${TAG}"
