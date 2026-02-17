@@ -330,9 +330,12 @@ export const PortalView = () => {
 
   const barSide = barOnLeft ? 'left' : 'right';
 
-  const barX = barOnLeft ? bounds.x : bounds.x + bounds.width - BAR_WIDTH;
-  const browserX = showControlBar && barOnLeft ? bounds.x + BAR_WIDTH : bounds.x;
-  const browserWidth = showControlBar ? bounds.width - BAR_WIDTH : bounds.width;
+  const shrinkForBar = showControlBar && viewMode === ViewMode.Expand;
+  const barX = barOnLeft
+    ? bounds.x - BAR_WIDTH
+    : bounds.x + bounds.width - (shrinkForBar ? BAR_WIDTH : 0);
+  const browserX = bounds.x;
+  const browserWidth = shrinkForBar ? bounds.width - BAR_WIDTH : bounds.width;
 
   return (
     <>

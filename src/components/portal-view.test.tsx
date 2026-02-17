@@ -57,7 +57,7 @@ const createState = (viewMode: ViewMode, position = Position.TopRight, margin = 
 // BAR_WIDTH = 48
 // PICTURE_WIDTH = 854 * 0.4 = 341.6
 // PICTURE_HEIGHT = 341.6 / 1.85 ≈ 184.6486
-// browserWidth in picture mode = 341.6 - 48 = 293.6
+// Bar extends outside PiP bounds, so browserWidth = pictureWidth = 341.6
 
 describe('PortalView and PortalViewOuter', () => {
   beforeEach(() => {
@@ -146,11 +146,11 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
-    // TopRight → bar on left, browserX = bounds.x + 48
+    // TopRight → bar extends outside, browserX = bounds.x = 492.4
     const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
-    expect(x).toBeCloseTo(540.4, 3);
+    expect(x).toBeCloseTo(492.4, 3);
     expect(y).toBeCloseTo(20, 3);
-    expect(width).toBeCloseTo(293.6, 3);
+    expect(width).toBeCloseTo(341.6, 3);
     expect(height).toBeCloseTo(184.6486, 3);
 
     unmount();
@@ -216,7 +216,7 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
-    // Expand mode → bar on right, browserX = bounds.x, browserWidth = 494 - 48 = 446
+    // Expand mode → bar shrinks browser width: browserWidth = 494 - 48 = 446
     const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBe(130);
     expect(y).toBe(30);
@@ -225,16 +225,15 @@ describe('PortalView and PortalViewOuter', () => {
   });
 
   it.each([
-    // bar on right: browserX = bounds.x, browserWidth = 293.6
-    // bar on left: browserX = bounds.x + 48, browserWidth = 293.6
-    [Position.Top, 256.2, 20],          // bar right
-    [Position.TopRight, 540.4, 20],     // bar left: 492.4 + 48
-    [Position.Right, 540.4, 174.6757],  // bar left: 492.4 + 48
-    [Position.BottomRight, 540.4, 329.3514], // bar left: 492.4 + 48
-    [Position.Bottom, 256.2, 329.3514], // bar right
-    [Position.BottomLeft, 20, 329.3514], // bar right
-    [Position.Left, 20, 174.6757],      // bar right
-    [Position.TopLeft, 20, 20],         // bar right
+    // Bar extends outside PiP bounds, browserX = bounds.x, browserWidth = 341.6
+    [Position.Top, 256.2, 20],
+    [Position.TopRight, 492.4, 20],
+    [Position.Right, 492.4, 174.6757],
+    [Position.BottomRight, 492.4, 329.3514],
+    [Position.Bottom, 256.2, 329.3514],
+    [Position.BottomLeft, 20, 329.3514],
+    [Position.Left, 20, 174.6757],
+    [Position.TopLeft, 20, 20],
   ])('places picture mode correctly for position %s', async (position, expectedX, expectedY) => {
     vi.mocked(useGlobalState).mockReturnValue([
       createState(ViewMode.Picture, position as Position, 20),
@@ -249,7 +248,7 @@ describe('PortalView and PortalViewOuter', () => {
     const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBeCloseTo(expectedX, 3);
     expect(y).toBeCloseTo(expectedY, 3);
-    expect(width).toBeCloseTo(293.6, 3);
+    expect(width).toBeCloseTo(341.6, 3);
     expect(height).toBeCloseTo(184.6486, 3);
   });
 
@@ -324,7 +323,7 @@ describe('PortalView and PortalViewOuter', () => {
     }
   });
 
-  it('hides control bar and gives full width when controlBar is false', async () => {
+  it('hides control bar when controlBar is false', () => {
     const state = createState(ViewMode.Picture);
     state.controlBar = false;
     vi.mocked(useGlobalState).mockReturnValue([state] as never);
@@ -332,15 +331,6 @@ describe('PortalView and PortalViewOuter', () => {
     const { container } = render(<PortalView />);
 
     expect(container.querySelector('[data-testid="control-bar"]')).toBeNull();
-
-    await waitFor(() => {
-      expect(setBounds).toHaveBeenCalled();
-    });
-
-    // Without bar: browserX = bounds.x (no offset), browserWidth = full pictureWidth (341.6)
-    const [x, _y, width] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
-    expect(x).toBeCloseTo(492.4, 3);
-    expect(width).toBeCloseTo(341.6, 3);
   });
 
   it('keeps same bounds when polling returns equal non-null rectangles', () => {

@@ -22,8 +22,12 @@ const COLLAPSED_TAP_WIDTH = 16;
 
 export const ControlBar = ({ x, y, height, side, viewMode }: ControlBarProps) => {
   const [{ size }, setState] = useGlobalState();
-  const { expanded, show, onInteraction } = useAutoHide();
+  const autoHide = useAutoHide();
   const prevViewModeRef = useRef(viewMode);
+
+  const alwaysShow = viewMode === ViewMode.Expand;
+  const expanded = alwaysShow || autoHide.expanded;
+  const { show, onInteraction } = autoHide;
 
   useEffect(() => {
     if (prevViewModeRef.current !== viewMode) {

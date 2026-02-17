@@ -301,6 +301,19 @@ describe('ControlBar', () => {
       expect(onInteraction).toHaveBeenCalledTimes(2);
     });
 
+    it('never collapses in Expand mode even when autoHide says collapsed', () => {
+      createMockAutoHide(false);
+      const { state, setState } = createMockState(ViewMode.Expand);
+      vi.mocked(useGlobalState).mockReturnValue([state, setState, {}] as never);
+
+      render(
+        <ControlBar x={0} y={0} height={300} side="right" viewMode={ViewMode.Expand} />,
+      );
+
+      expect(screen.getByTestId('control-bar-backdrop')).toBeTruthy();
+      expect(screen.queryByTestId('control-bar-collapsed')).toBeNull();
+    });
+
     it('calls show() when viewMode changes', () => {
       const { show } = createMockAutoHide(true);
       const { state, setState } = createMockState(ViewMode.Picture);
