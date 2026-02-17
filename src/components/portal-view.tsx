@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useGlobalState } from '../hooks/global-state';
 import { intersectRectangles } from '../lib/geometry';
 import { UIComposition, useUIComposition } from '../hooks/use-ui-composition';
+import { BAR_WIDTH, ControlBar } from './control-bar';
+import { MinimisedIndicator } from './minimised-indicator';
 import {
   PICTURE_HEIGHT,
   PICTURE_WIDTH,
@@ -61,12 +63,12 @@ interface DeckWindow {
 const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
   useUIComposition(UIComposition.Notification);
 
-  const [{ browser, view }] = useState<{ browser: BrowserHandle; view: BrowserViewHandle }>(() => {
+  const [handles] = useState<{ browser: BrowserHandle; view: BrowserViewHandle } | null>(() => {
     const root = Router.WindowStore?.GamepadUIMainWindowInstance as
       | (WindowRouter & MainWindowInstance)
       | undefined;
     if (!root) {
-      throw new Error('Unable to access Decky main window instance');
+      return null;
     }
 
     const view = root.CreateBrowserView('portal');
@@ -81,20 +83,20 @@ const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
   });
 
   useEffect(() => {
-    browser.SetVisible(visible);
-  }, [browser, visible]);
+    handles?.browser.SetVisible(visible);
+  }, [handles, visible]);
 
   useEffect(() => {
-    view.LoadURL(url);
-  }, [url, view]);
+    handles?.view.LoadURL(url);
+  }, [url, handles]);
 
   useEffect(() => {
-    browser.SetBounds(x, y, width, height);
-  }, [browser, x, y, width, height]);
+    handles?.browser.SetBounds(x, y, width, height);
+  }, [handles, x, y, width, height]);
 
   useEffect(() => {
-    return () => view.Destroy();
-  }, [view]);
+    return () => handles?.view.Destroy();
+  }, [handles]);
 
   return null;
 };
@@ -256,6 +258,14 @@ export const PortalView = () => {
       }
       break;
 
+    case ViewMode.Minimised:
+      return (
+        <>
+          <Browser url={url} visible={false} x={0} y={0} width={0} height={0} />
+          <MinimisedIndicator position={position} margin={settings.margin} />
+        </>
+      );
+
     case ViewMode.Picture:
       {
         switch (position) {
@@ -310,7 +320,44 @@ export const PortalView = () => {
       break;
   }
 
-  return <Browser url={url} visible={visible} {...bounds} />;
+  const showControlBar = settings.controlBar;
+
+  const barOnLeft =
+    viewMode === ViewMode.Picture &&
+    (position === Position.TopRight ||
+      position === Position.Right ||
+      position === Position.BottomRight);
+
+  const barSide = barOnLeft ? 'left' : 'right';
+
+  const shrinkForBar = showControlBar && viewMode === ViewMode.Expand;
+  const barX = barOnLeft
+    ? bounds.x - BAR_WIDTH
+    : bounds.x + bounds.width - (shrinkForBar ? BAR_WIDTH : 0);
+  const browserX = bounds.x;
+  const browserWidth = shrinkForBar ? bounds.width - BAR_WIDTH : bounds.width;
+
+  return (
+    <>
+      <Browser
+        url={url}
+        visible={visible}
+        x={browserX}
+        y={bounds.y}
+        width={browserWidth}
+        height={bounds.height}
+      />
+      {visible && showControlBar && (
+        <ControlBar
+          x={barX}
+          y={bounds.y}
+          height={bounds.height}
+          side={barSide}
+          viewMode={viewMode}
+        />
+      )}
+    </>
+  );
 };
 
 export const PortalViewOuter = () => {

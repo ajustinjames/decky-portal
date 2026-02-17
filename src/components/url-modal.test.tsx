@@ -38,6 +38,7 @@ const createState = () => ({
   margin: 30,
   size: 1,
   url: 'https://netflix.com',
+  controlBar: true,
 });
 
 describe('UrlModal', () => {
@@ -77,6 +78,21 @@ describe('UrlModal', () => {
 
     expect(state.url).toBe('https://youtube.com');
     expect(state.visible).toBe(true);
+  });
+
+  it('does not cause infinite loop from unstable setGlobalState reference', () => {
+    let state = createState();
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState] as never);
+
+    render(<UrlModal closeModal={() => {}} />);
+
+    // Should be called exactly once on mount (visible: false), not repeatedly
+    expect(setGlobalState).toHaveBeenCalledTimes(1);
+    expect(state.visible).toBe(false);
   });
 
   it('restores visibility when cancelled', () => {

@@ -15,8 +15,11 @@ import { useGlobalState } from '../hooks/global-state';
 import { UrlModalWithState } from './url-modal';
 
 export const Settings = () => {
-  const [{ viewMode, position, margin, url, size }, setGlobalState, stateContext] =
+  const [{ viewMode, position, margin, url, size, controlBar }, setGlobalState, stateContext] =
     useGlobalState();
+
+  const isMinimised = viewMode === ViewMode.Minimised;
+  const showPipControls = viewMode === ViewMode.Picture || isMinimised;
 
   useEffect(() => {
     setGlobalState((state) => ({
@@ -24,7 +27,8 @@ export const Settings = () => {
       visible: true,
       viewMode: state.viewMode === ViewMode.Closed ? ViewMode.Picture : state.viewMode,
     }));
-  }, [setGlobalState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const positionOptions = [
     { label: 'Top Left', data: Position.TopLeft },
@@ -78,6 +82,8 @@ export const Settings = () => {
             <PanelSectionRow>
               <ToggleField
                 label="Expand"
+                disabled={isMinimised}
+                description={isMinimised ? 'Unavailable while minimised' : undefined}
                 checked={viewMode === ViewMode.Expand}
                 onChange={(checked) => {
                   setGlobalState((state) => ({
@@ -87,10 +93,31 @@ export const Settings = () => {
                 }}
               />
             </PanelSectionRow>
+            {!isMinimised && (
+              <PanelSectionRow>
+                <ToggleField
+                  label="Control Bar"
+                  checked={controlBar}
+                  onChange={(checked) => {
+                    setGlobalState((state) => ({
+                      ...state,
+                      controlBar: checked,
+                    }));
+                  }}
+                />
+              </PanelSectionRow>
+            )}
           </>
         )}
-        {viewMode === ViewMode.Picture && (
+        {showPipControls && (
           <>
+            {isMinimised && (
+              <PanelSectionRow>
+                <div style={{ fontSize: 12, opacity: 0.6, padding: '0 0 8px' }}>
+                  Portal is minimised. Changes apply when restored.
+                </div>
+              </PanelSectionRow>
+            )}
             <PanelSectionRow>
               <DropdownItem
                 label="View"
@@ -107,7 +134,6 @@ export const Settings = () => {
                     ...state,
                     visible: true,
                     position: option.data,
-                    viewMode: ViewMode.Picture,
                   }))
                 }
               />
@@ -121,7 +147,6 @@ export const Settings = () => {
                     ...state,
                     size,
                     visible: true,
-                    viewMode: ViewMode.Picture,
                   }))
                 }
                 min={0.7}
@@ -145,7 +170,6 @@ export const Settings = () => {
                     ...state,
                     margin,
                     visible: true,
-                    viewMode: ViewMode.Picture,
                   }))
                 }
                 min={0}

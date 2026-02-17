@@ -21,11 +21,13 @@ import { Position, ViewMode } from '../lib/util';
 
 const createInitialState = (): State => ({
   viewMode: ViewMode.Closed,
+  previousViewMode: ViewMode.Picture,
   visible: true,
   position: Position.TopRight,
   margin: 30,
   size: 1,
   url: 'https://netflix.com',
+  controlBar: true,
 });
 
 describe('globalState', () => {

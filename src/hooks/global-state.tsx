@@ -6,11 +6,13 @@ import { useStateValue } from 'cotton-box-react';
 
 export interface State {
   viewMode: ViewMode;
+  previousViewMode: ViewMode;
   position: Position;
   visible: boolean;
   margin: number;
   size: number;
   url: string;
+  controlBar: boolean;
 }
 
 export const GlobalContext = createContext(new StateManager<State>({} as State));

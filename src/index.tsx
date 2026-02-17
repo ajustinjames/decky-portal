@@ -12,11 +12,13 @@ import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './lib/storage';
 export default definePlugin(() => {
   const defaultState: State = {
     viewMode: ViewMode.Closed,
+    previousViewMode: ViewMode.Picture,
     visible: true,
     position: Position.TopRight,
     margin: 30,
     size: 1,
     url: 'https://netflix.com',
+    controlBar: true,
   };
 
   const state = new StateManager<State>({

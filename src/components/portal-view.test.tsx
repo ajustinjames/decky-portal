@@ -18,6 +18,12 @@ vi.mock('../hooks/global-state', () => ({
   useGlobalState: vi.fn(),
 }));
 
+vi.mock('./minimised-indicator', () => ({
+  MinimisedIndicator: ({ position, margin }: { position: number; margin: number }) => (
+    <div data-testid="minimised-indicator" data-position={position} data-margin={margin} />
+  ),
+}));
+
 vi.mock('../hooks/use-ui-composition', () => ({
   UIComposition: {
     Notification: 1,
@@ -39,12 +45,19 @@ vi.mock('@decky/ui', () => ({
 
 const createState = (viewMode: ViewMode, position = Position.TopRight, margin = 20) => ({
   viewMode,
+  previousViewMode: ViewMode.Picture,
   visible: true,
   position,
   margin,
   size: 1,
   url: 'https://netflix.com',
+  controlBar: true,
 });
+
+// BAR_WIDTH = 48
+// PICTURE_WIDTH = 854 * 0.4 = 341.6
+// PICTURE_HEIGHT = 341.6 / 1.85 ≈ 184.6486
+// Bar extends outside PiP bounds, so browserWidth = pictureWidth = 341.6
 
 describe('PortalView and PortalViewOuter', () => {
   beforeEach(() => {
@@ -79,18 +92,44 @@ describe('PortalView and PortalViewOuter', () => {
     expect(createBrowserView).toHaveBeenCalledTimes(1);
   });
 
-  it('throws when decky main window instance is unavailable', () => {
+  it('creates browser view when minimised (keeps it alive) and renders indicator', () => {
+    vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Minimised)] as never);
+
+    const { container } = render(<PortalViewOuter />);
+
+    expect(createBrowserView).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('[data-testid="minimised-indicator"]')).toBeTruthy();
+  });
+
+  it('sets bounds to 0x0 and hides browser when minimised', async () => {
+    vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Minimised)] as never);
+
+    render(<PortalView />);
+
+    await waitFor(() => {
+      expect(setBounds).toHaveBeenCalled();
+    });
+
+    const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
+    expect(x).toBe(0);
+    expect(y).toBe(0);
+    expect(width).toBe(0);
+    expect(height).toBe(0);
+    expect(setVisible).toHaveBeenCalledWith(false);
+  });
+
+  it('renders gracefully when decky main window instance is unavailable', () => {
     vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
 
-    const errorSpy = vi.spyOn(globalThis.console, 'error').mockImplementation(() => {});
     const original = Router.WindowStore!.GamepadUIMainWindowInstance;
     Router.WindowStore!.GamepadUIMainWindowInstance = undefined as never;
 
     try {
-      expect(() => render(<PortalView />)).toThrow('Unable to access Decky main window instance');
+      const { container } = render(<PortalView />);
+      expect(container.querySelector('[data-testid="control-bar"]')).toBeTruthy();
+      expect(createBrowserView).not.toHaveBeenCalled();
     } finally {
       Router.WindowStore!.GamepadUIMainWindowInstance = original;
-      errorSpy.mockRestore();
     }
   });
 
@@ -107,6 +146,7 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
+    // TopRight → bar extends outside, browserX = bounds.x = 492.4
     const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBeCloseTo(492.4, 3);
     expect(y).toBeCloseTo(20, 3);
@@ -176,14 +216,16 @@ describe('PortalView and PortalViewOuter', () => {
       expect(setBounds).toHaveBeenCalled();
     });
 
+    // Expand mode → bar shrinks browser width: browserWidth = 494 - 48 = 446
     const [x, y, width, height] = setBounds.mock.calls[setBounds.mock.calls.length - 1];
     expect(x).toBe(130);
     expect(y).toBe(30);
-    expect(width).toBe(494);
+    expect(width).toBe(446);
     expect(height).toBe(234);
   });
 
   it.each([
+    // Bar extends outside PiP bounds, browserX = bounds.x, browserWidth = 341.6
     [Position.Top, 256.2, 20],
     [Position.TopRight, 492.4, 20],
     [Position.Right, 492.4, 174.6757],
@@ -208,6 +250,24 @@ describe('PortalView and PortalViewOuter', () => {
     expect(y).toBeCloseTo(expectedY, 3);
     expect(width).toBeCloseTo(341.6, 3);
     expect(height).toBeCloseTo(184.6486, 3);
+  });
+
+  it('hides control bar when visible is false', () => {
+    const state = createState(ViewMode.Picture);
+    state.visible = false;
+    vi.mocked(useGlobalState).mockReturnValue([state] as never);
+
+    const { container } = render(<PortalView />);
+
+    expect(container.querySelector('[data-testid="control-bar"]')).toBeNull();
+  });
+
+  it('shows control bar when visible is true', () => {
+    vi.mocked(useGlobalState).mockReturnValue([createState(ViewMode.Picture)] as never);
+
+    const { container } = render(<PortalView />);
+
+    expect(container.querySelector('[data-testid="control-bar"]')).toBeTruthy();
   });
 
   it('updates deck component bounds only when interval polling detects changes', async () => {
@@ -261,6 +321,16 @@ describe('PortalView and PortalViewOuter', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('hides control bar when controlBar is false', () => {
+    const state = createState(ViewMode.Picture);
+    state.controlBar = false;
+    vi.mocked(useGlobalState).mockReturnValue([state] as never);
+
+    const { container } = render(<PortalView />);
+
+    expect(container.querySelector('[data-testid="control-bar"]')).toBeNull();
   });
 
   it('keeps same bounds when polling returns equal non-null rectangles', () => {

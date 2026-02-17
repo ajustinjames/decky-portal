@@ -48,6 +48,9 @@ yalc.lock
 
 .vscode/settings.json
 
+# Deck connection config (contains IP/password)
+deck.json
+
 # Ignore output folder
 
 backend/out

@@ -4,24 +4,37 @@ Portal is a Decky Loader plugin that provides an in-game web portal for streamin
 
 ![Portal placeholder screenshot](https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg)
 
+## Background
+
+I created this fork of decky-pip for myself due to enjoying the original but wanting some QOL features implemented.
+
 ## Installation
 
-### Decky Store (TBD)
+### Decky Store
 
-1. Open Decky Loader on Steam Deck.
-2. Search for **Portal**.
-3. Install and open it from the Quick Access menu.
+This plugin is not available on the Decky Store, and will not be submitted. Decky homebrew has a pretty clear anti-ai code stance, and I respect their wishes. Please do not bother them about this policy.
 
 ### Manual Sideload
 
+**Prerequisites:**
+- Node >= 22 (see `.nvmrc`), pnpm >= 9
+- Docker (used to build inside the Decky builder image)
+- SSH enabled on your Steam Deck (`sudo systemctl enable --now sshd` in Desktop Mode)
+
+**Steps:**
+
 1. Install dependencies:
-   - `pnpm install`
-2. Build the plugin:
-   - `pnpm build`
-3. Deploy to Deck from VS Code tasks:
-   - `build`
-   - `deploy`
-   - `builddeploy`
+   ```bash
+   pnpm install
+   ```
+2. Configure your Deck connection (deck.json)
+3. Build and deploy:
+   ```bash
+   pnpm deck:builddeploy    # build inside Docker + deploy over SSH
+   ```
+   Or run the steps separately:
+   - `pnpm deck:build` — builds the plugin inside Docker and packages a zip into `out/`
+   - `pnpm deck:deploy` — copies the zip to your Deck over SSH, extracts it, and restarts plugin_loader
 
 ## Development
 

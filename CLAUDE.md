@@ -19,11 +19,14 @@ pnpm format:check     # Prettier check only
 pnpm test             # Vitest run once
 pnpm test:watch       # Vitest watch mode
 pnpm test:coverage    # Vitest with coverage (80% thresholds for statements/functions/lines, 75% branches)
+pnpm deck:build       # Docker build + zip into out/ (reads plugin.json)
+pnpm deck:deploy      # Deploy zip to Steam Deck over SSH (reads deck.json)
+pnpm deck:builddeploy # Build then deploy in one step
 ```
 
 Run a single test file: `pnpm vitest run src/components/portal-view.test.tsx`
 
-**Requirements:** Node >=22 (see .nvmrc), pnpm >=9
+**Requirements:** Node >=22 (see .nvmrc), pnpm >=9, Docker (for deck:build)
 
 ## Architecture
 
