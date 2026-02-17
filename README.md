@@ -12,34 +12,36 @@ I created this fork of [decky-pip](https://github.com/rossimo/decky-pip) for mys
 
 ## Installation
 
-Portal must be sideloaded manually. You can either install a pre-built release or build from source.
+Portal must be sideloaded manually. You can install a pre-built release or build from source.
 
-**Both methods require:**
-- [Decky Loader](https://decky.xyz/) installed on your Steam Deck
-- SSH enabled on your Steam Deck (`sudo systemctl enable --now sshd` in Desktop Mode) or manual downloading/copying of files
+**All methods require [Decky Loader](https://decky.xyz/) installed on your Steam Deck.**
 
-### Option 1 — Install a Pre-built Release (Recommended)
+### Option 1 — Download Directly on Steam Deck (Recommended)
 
-Download the latest release zip from [GitHub Releases](https://github.com/ajustinjames/decky-portal/releases) and copy it to your Deck.
+1. Switch to **Desktop Mode** on your Steam Deck.
+2. Open a web browser and go to the [latest release](https://github.com/ajustinjames/decky-portal/releases/latest).
+3. Download **Portal.zip** and note where it was saved (usually `~/Downloads`).
+4. Switch back to **Gaming Mode**.
+5. Open the **Quick Access Menu** (... button) and go to the **Decky** tab.
+6. Tap the **settings icon** (gear) at the top, then choose **Install Plugin from ZIP File**.
+7. Browse to the downloaded `Portal.zip` and select it.
+8. Decky will install the plugin automatically. Portal should now appear in the Decky menu.
 
-1. Download `Portal.zip` from the [latest release](https://github.com/ajustinjames/decky-portal/releases/latest).
-2. Copy the zip to your Steam Deck (via SCP, SFTP, KDE Connect, USB drive, etc.):
-   ```bash
-   scp Portal.zip deck@<DECK_IP>:/tmp/Portal.zip
-   ```
-3. SSH into your Deck and install the plugin:
-   ```bash
-   ssh deck@<DECK_IP>
+### Option 2 — Download on PC and Copy to Steam Deck
 
-   sudo mkdir -p ~/homebrew/plugins/Portal
-   sudo bsdtar -xzpf /tmp/Portal.zip -C ~/homebrew/plugins/Portal --strip-components=1 --fflags
-   sudo chown -R deck:deck ~/homebrew/plugins/Portal
-   sudo systemctl restart plugin_loader
-   rm /tmp/Portal.zip
-   ```
-4. Portal should now appear in the Decky quick access menu.
+1. Download **Portal.zip** from the [latest release](https://github.com/ajustinjames/decky-portal/releases/latest) on your PC.
+2. Copy `Portal.zip` to your Steam Deck using any of these methods:
+   - **USB drive** — Copy to a USB drive, plug it into your Deck.
+   - **KDE Connect** — Pair your PC and Deck on the same network and send the file.
+   - **SMB / network share** — Access a shared folder from Dolphin on your Deck.
+   - **MicroSD card** — Copy to a MicroSD card and insert it into the Deck.
+3. Switch to **Gaming Mode** on your Steam Deck.
+4. Open the **Quick Access Menu** (... button) and go to the **Decky** tab.
+5. Tap the **settings icon** (gear) at the top, then choose **Install Plugin from ZIP File**.
+6. Browse to where you copied `Portal.zip` and select it.
+7. Decky will install the plugin automatically. Portal should now appear in the Decky menu.
 
-### Option 2 — Build from Source
+### Option 3 — Build from Source
 
 **Additional prerequisites:** Node >= 22 (see `.nvmrc`), pnpm >= 9, Docker
 
