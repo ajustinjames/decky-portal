@@ -65,7 +65,7 @@ export const ControlBar = ({ x, y, height, side, viewMode }: ControlBarProps) =>
   };
 
   const cycleSize = () => {
-    const currentIndex = SIZE_STEPS.indexOf(size);
+    const currentIndex = SIZE_STEPS.findIndex((s) => Math.abs(s - size) < 0.01);
     const nextIndex = (currentIndex + 1) % SIZE_STEPS.length;
     setState((s) => ({
       ...s,

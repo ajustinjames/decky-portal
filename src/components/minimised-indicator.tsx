@@ -1,7 +1,7 @@
 import { FaTv } from 'react-icons/fa';
 
 import { useGlobalState } from '../hooks/global-state';
-import { Position, SCREEN_HEIGHT, SCREEN_WIDTH } from '../lib/util';
+import { Position, SCREEN_HEIGHT, SCREEN_WIDTH, ViewMode } from '../lib/util';
 
 const INDICATOR_SIZE = 48;
 
@@ -42,7 +42,10 @@ export const MinimisedIndicator = ({ position, margin }: MinimisedIndicatorProps
   const restore = () => {
     setState((s) => ({
       ...s,
-      viewMode: s.previousViewMode,
+      viewMode:
+        s.previousViewMode === ViewMode.Minimised || s.previousViewMode === ViewMode.Closed
+          ? ViewMode.Picture
+          : s.previousViewMode,
     }));
   };
 
