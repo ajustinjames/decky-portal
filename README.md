@@ -92,14 +92,19 @@ pnpm test             # run tests
 pnpm test:coverage    # run tests with coverage
 ```
 
-## Documentation
+## Roadmap
 
-Project documentation lives in [docs/](docs):
+Portal started as a basic PiP viewer and is being overhauled into a full browser companion. Planned work includes:
 
-- [docs/README.md](docs/README.md)
-- [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)
-- [docs/FUTURE_FEATURES.md](docs/FUTURE_FEATURES.md)
-- [docs/VISION.md](docs/VISION.md)
+- **Bookmarks** — save and quickly launch favourite sites
+- **Fullscreen video** — one-tap fullscreen for streaming content
+- **Authentication** — easier sign-in flows for sites like Netflix and YouTube
+- **Back/forward navigation** — browser-style history navigation
+- **Loading indicator** — visual feedback while pages load
+- **Volume control** — independent audio control for the browser
+- **History** — recently visited URLs
+
+See [docs/](docs) for feature specs and other project documentation.
 
 ## License
 

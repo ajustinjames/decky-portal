@@ -26,7 +26,7 @@ Provide a single-tap action that maximises the video element within the popup, h
 ## Experience Outline
 
 ### Triggering Fullscreen Video
-- A dedicated "fullscreen video" button appears in the popup's touch control bar (see [Window Controls](WINDOW_CONTROLS.md)).
+- A dedicated "fullscreen video" button appears in the popup's touch control bar.
 - The icon should be distinct from the "expand window" action — expand makes the *window* larger; fullscreen video makes the *video* fill the window.
 - Tapping the button instructs the embedded browser to trigger the video element's fullscreen API (or simulate a click on the site's native fullscreen button).
 
