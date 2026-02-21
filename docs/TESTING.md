@@ -1,6 +1,6 @@
 # Testing Strategy
 
-> This document defines how Decky Portal is tested — the tools, the architecture, the mocking approach, and the coverage goals. It is the companion to [Repo Improvements § 4](REPO_IMPROVEMENTS.md#4-testing-framework) which covers setup checklist items.
+> This document defines how Decky Portal is tested — the tools, the architecture, the mocking approach, and the coverage goals.
 
 ---
 
