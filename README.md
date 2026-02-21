@@ -97,12 +97,7 @@ pnpm test:coverage    # run tests with coverage
 Portal started as a basic PiP viewer and is being overhauled into a full browser companion. Planned work includes:
 
 - **Bookmarks** — save and quickly launch favourite sites
-- **Fullscreen video** — one-tap fullscreen for streaming content
-- **Authentication** — easier sign-in flows for sites like Netflix and YouTube
-- **Back/forward navigation** — browser-style history navigation
-- **Loading indicator** — visual feedback while pages load
-- **Volume control** — independent audio control for the browser
-- **History** — recently visited URLs
+- **Control Bar** — Quick PIP controls without having to navigate menus
 
 See [docs/](docs) for feature specs and other project documentation.
 
