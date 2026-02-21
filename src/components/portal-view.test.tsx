@@ -19,8 +19,19 @@ vi.mock('../hooks/global-state', () => ({
 }));
 
 vi.mock('./minimised-indicator', () => ({
-  MinimisedIndicator: ({ position, margin }: { position: number; margin: number }) => (
-    <div data-testid="minimised-indicator" data-position={position} data-margin={margin} />
+  MinimisedIndicator: ({
+    position,
+    bounds,
+  }: {
+    position: number;
+    bounds: { x: number; y: number; width: number; height: number };
+  }) => (
+    <div
+      data-testid="minimised-indicator"
+      data-position={position}
+      data-bounds-x={bounds.x}
+      data-bounds-width={bounds.width}
+    />
   ),
 }));
 

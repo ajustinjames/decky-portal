@@ -1,28 +1,35 @@
 import { FaTv } from 'react-icons/fa';
 
 import { useGlobalState } from '../hooks/global-state';
-import { Position, SCREEN_HEIGHT, SCREEN_WIDTH, ViewMode } from '../lib/util';
+import { Position, ViewMode } from '../lib/util';
 
 const INDICATOR_SIZE = 48;
 
-interface MinimisedIndicatorProps {
-  position: Position;
-  margin: number;
+interface Bounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
-const getIndicatorPosition = (position: Position, margin: number) => {
-  const farX = SCREEN_WIDTH - INDICATOR_SIZE - margin;
-  const farY = SCREEN_HEIGHT - INDICATOR_SIZE - margin;
-  const centerX = (SCREEN_WIDTH - INDICATOR_SIZE) / 2;
-  const centerY = (SCREEN_HEIGHT - INDICATOR_SIZE) / 2;
+interface MinimisedIndicatorProps {
+  position: Position;
+  bounds: Bounds;
+}
+
+const getIndicatorPosition = (position: Position, bounds: Bounds) => {
+  const farX = bounds.x + bounds.width - INDICATOR_SIZE;
+  const farY = bounds.y + bounds.height - INDICATOR_SIZE;
+  const centerX = bounds.x + (bounds.width - INDICATOR_SIZE) / 2;
+  const centerY = bounds.y + (bounds.height - INDICATOR_SIZE) / 2;
 
   switch (position) {
     case Position.TopLeft:
-      return { left: margin, top: margin };
+      return { left: bounds.x, top: bounds.y };
     case Position.Top:
-      return { left: centerX, top: margin };
+      return { left: centerX, top: bounds.y };
     case Position.TopRight:
-      return { left: farX, top: margin };
+      return { left: farX, top: bounds.y };
     case Position.Right:
       return { left: farX, top: centerY };
     case Position.BottomRight:
@@ -30,13 +37,13 @@ const getIndicatorPosition = (position: Position, margin: number) => {
     case Position.Bottom:
       return { left: centerX, top: farY };
     case Position.BottomLeft:
-      return { left: margin, top: farY };
+      return { left: bounds.x, top: farY };
     case Position.Left:
-      return { left: margin, top: centerY };
+      return { left: bounds.x, top: centerY };
   }
 };
 
-export const MinimisedIndicator = ({ position, margin }: MinimisedIndicatorProps) => {
+export const MinimisedIndicator = ({ position, bounds }: MinimisedIndicatorProps) => {
   const [, setState] = useGlobalState();
 
   const restore = () => {
@@ -49,7 +56,7 @@ export const MinimisedIndicator = ({ position, margin }: MinimisedIndicatorProps
     }));
   };
 
-  const { left, top } = getIndicatorPosition(position, margin);
+  const { left, top } = getIndicatorPosition(position, bounds);
 
   return (
     <button
