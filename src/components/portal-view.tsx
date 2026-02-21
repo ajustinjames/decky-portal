@@ -262,7 +262,7 @@ export const PortalView = () => {
       return (
         <>
           <Browser url={url} visible={false} x={0} y={0} width={0} height={0} />
-          <MinimisedIndicator position={position} margin={settings.margin} />
+          <MinimisedIndicator position={position} bounds={bounds} />
         </>
       );
 
