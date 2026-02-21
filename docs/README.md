@@ -21,8 +21,6 @@ Portal lets Steam Deck users open websites — YouTube, Twitch, Netflix, and mor
 | Document                                         | Description                                              |
 | ------------------------------------------------ | -------------------------------------------------------- |
 | [Bookmarks](features/BOOKMARKS.md)               | Save, organise, and quickly launch favourite websites    |
-| [Fullscreen Video](features/FULLSCREEN_VIDEO.md) | One-tap fullscreen for video content inside the popup    |
-| [Authentication](features/AUTHENTICATION.md)     | Easier and safer ways to sign into websites              |
 
 ### Policy
 
