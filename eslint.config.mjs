@@ -29,6 +29,7 @@ export default [
                 clearInterval: 'readonly',
                 setTimeout: 'readonly',
                 clearTimeout: 'readonly',
+                crypto: 'readonly',
                 HTMLInputElement: 'readonly',
             },
         },
