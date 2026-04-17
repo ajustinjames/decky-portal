@@ -15,6 +15,7 @@ export interface State {
   controlBar: boolean;
   bookmarks: Bookmark[];
   quickAccessIds: string[];
+  bookmarksInitialised: boolean;
 }
 
 export const GlobalContext = createContext(new StateManager<State>({} as State));

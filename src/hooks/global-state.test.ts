@@ -30,6 +30,7 @@ const createInitialState = (): State => ({
   controlBar: true,
   bookmarks: [],
   quickAccessIds: [],
+  bookmarksInitialised: false,
 });
 
 describe('globalState', () => {
