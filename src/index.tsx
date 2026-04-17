@@ -19,6 +19,8 @@ export default definePlugin(() => {
     size: 1,
     url: 'https://netflix.com',
     controlBar: true,
+    bookmarks: [],
+    quickAccessIds: [],
   };
 
   const state = new StateManager<State>({
@@ -26,8 +28,11 @@ export default definePlugin(() => {
     ...getPersistedPortalState(localStorage),
   });
 
-  state.watch(({ position, margin, size, url }) =>
-    localStorage.setItem(PORTAL_STORAGE_KEY, JSON.stringify({ position, margin, size, url })),
+  state.watch(({ position, margin, size, url, bookmarks, quickAccessIds }) =>
+    localStorage.setItem(
+      PORTAL_STORAGE_KEY,
+      JSON.stringify({ position, margin, size, url, bookmarks, quickAccessIds }),
+    ),
   );
 
   routerHook.addGlobalComponent('Portal', () => {

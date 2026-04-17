@@ -59,6 +59,9 @@ describe('plugin entrypoint', () => {
     const provider = globalComponentFactory!();
     const stateManager = provider.props.value as StateManager<Record<string, unknown>>;
 
+    const bookmarks = [{ id: 'bm-1', name: 'YouTube', url: 'https://youtube.com' }];
+    const quickAccessIds = ['bm-1'];
+
     stateManager.set({
       viewMode: 2,
       previousViewMode: 2,
@@ -67,6 +70,8 @@ describe('plugin entrypoint', () => {
       margin: 45,
       size: 1.3,
       url: 'https://example.com',
+      bookmarks,
+      quickAccessIds,
     });
 
     expect(setItemSpy).toHaveBeenCalledWith(
@@ -76,6 +81,8 @@ describe('plugin entrypoint', () => {
         margin: 45,
         size: 1.3,
         url: 'https://example.com',
+        bookmarks,
+        quickAccessIds,
       }),
     );
   });

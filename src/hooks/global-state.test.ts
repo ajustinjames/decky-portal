@@ -28,6 +28,8 @@ const createInitialState = (): State => ({
   size: 1,
   url: 'https://netflix.com',
   controlBar: true,
+  bookmarks: [],
+  quickAccessIds: [],
 });
 
 describe('globalState', () => {

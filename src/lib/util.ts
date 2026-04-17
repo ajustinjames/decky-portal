@@ -20,3 +20,19 @@ export enum Position {
   Left,
   TopLeft,
 }
+
+export interface Bookmark {
+  id: string;
+  name: string;
+  url: string;
+  iconUrl?: string;
+  iconDataUrl?: string;
+}
+
+export const generateBookmarkId = (): string => crypto.randomUUID();
+
+export const createBookmark = (name: string, url: string): Bookmark => ({
+  id: generateBookmarkId(),
+  name,
+  url,
+});
