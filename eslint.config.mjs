@@ -30,7 +30,10 @@ export default [
                 setTimeout: 'readonly',
                 clearTimeout: 'readonly',
                 crypto: 'readonly',
+                console: 'readonly',
+                URL: 'readonly',
                 HTMLInputElement: 'readonly',
+                HTMLButtonElement: 'readonly',
             },
         },
         plugins: {

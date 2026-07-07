@@ -13,6 +13,7 @@ import { FaEdit } from 'react-icons/fa';
 import { Position, ViewMode } from '../lib/util';
 import { useGlobalState } from '../hooks/global-state';
 import { UrlModalWithState } from './url-modal';
+import { QuickAccessBookmarks } from './quick-access-bookmarks';
 
 export const Settings = () => {
   const [{ viewMode, position, margin, url, size, controlBar }, setGlobalState, stateContext] =
@@ -205,6 +206,7 @@ export const Settings = () => {
           </>
         )}
       </PanelSection>
+      <QuickAccessBookmarks />
     </>
   );
 };

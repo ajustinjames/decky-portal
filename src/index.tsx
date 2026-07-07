@@ -30,19 +30,26 @@ export default definePlugin(() => {
     ...seedIfNeeded(getPersistedPortalState(localStorage)),
   });
 
-  state.watch(({ position, margin, size, url, bookmarks, quickAccessIds, bookmarksInitialised }) =>
-    localStorage.setItem(
-      PORTAL_STORAGE_KEY,
-      JSON.stringify({
-        position,
-        margin,
-        size,
-        url,
-        bookmarks,
-        quickAccessIds,
-        bookmarksInitialised,
-      }),
-    ),
+  state.watch(
+    ({ position, margin, size, url, bookmarks, quickAccessIds, bookmarksInitialised }) => {
+      try {
+        localStorage.setItem(
+          PORTAL_STORAGE_KEY,
+          JSON.stringify({
+            position,
+            margin,
+            size,
+            url,
+            bookmarks,
+            quickAccessIds,
+            bookmarksInitialised,
+          }),
+        );
+      } catch (error) {
+        // A quota failure must not take down every state transition.
+        console.error('portal: failed to persist state', error);
+      }
+    },
   );
 
   routerHook.addGlobalComponent('Portal', () => {

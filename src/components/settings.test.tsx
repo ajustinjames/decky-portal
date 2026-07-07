@@ -15,6 +15,10 @@ vi.mock('./url-modal', () => ({
   UrlModalWithState: () => <div>URL Modal</div>,
 }));
 
+vi.mock('./quick-access-bookmarks', () => ({
+  QuickAccessBookmarks: () => <div data-testid="quick-access-bookmarks" />,
+}));
+
 interface DropdownOption {
   data: number;
   label: string;

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { modalWithState } from './modal';
 import { useGlobalState } from '../hooks/global-state';
+import { normalizeUrl } from '../lib/url';
 
 export const UrlModal = (props: ModalRootProps) => {
   const [{ url }, setGlobalState] = useGlobalState();
@@ -27,10 +28,12 @@ export const UrlModal = (props: ModalRootProps) => {
       {...props}
       strTitle="Address"
       onOK={() => {
+        const normalized = normalizeUrl(field);
         setGlobalState((state) => ({
           ...state,
           visible: true,
-          url: field,
+          // Keep the previous URL when the input isn't a usable http(s) URL.
+          url: normalized ?? state.url,
         }));
       }}
       onCancel={() => {

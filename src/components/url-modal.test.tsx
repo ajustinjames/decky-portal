@@ -76,7 +76,40 @@ describe('UrlModal', () => {
     fireEvent.change(screen.getByLabelText('url'), { target: { value: 'https://youtube.com' } });
     fireEvent.click(screen.getByText('OK'));
 
-    expect(state.url).toBe('https://youtube.com');
+    expect(state.url).toBe('https://youtube.com/');
+    expect(state.visible).toBe(true);
+  });
+
+  it('normalizes bare hostnames on confirm', () => {
+    let state = createState();
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState] as never);
+
+    render(<UrlModal closeModal={() => {}} />);
+
+    fireEvent.change(screen.getByLabelText('url'), { target: { value: 'youtube.com' } });
+    fireEvent.click(screen.getByText('OK'));
+
+    expect(state.url).toBe('https://youtube.com/');
+  });
+
+  it('keeps the previous url when the input is not a safe http(s) url', () => {
+    let state = createState();
+    const setGlobalState = vi.fn((updater: (s: typeof state) => typeof state) => {
+      state = updater(state);
+    });
+
+    vi.mocked(useGlobalState).mockReturnValue([state, setGlobalState] as never);
+
+    render(<UrlModal closeModal={() => {}} />);
+
+    fireEvent.change(screen.getByLabelText('url'), { target: { value: 'javascript:alert(1)' } });
+    fireEvent.click(screen.getByText('OK'));
+
+    expect(state.url).toBe('https://netflix.com');
     expect(state.visible).toBe(true);
   });
 
