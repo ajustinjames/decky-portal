@@ -12,6 +12,7 @@ Decky Portal is a Steam Deck plugin (Decky Loader) that provides a floating in-g
 
 ```bash
 pnpm build            # Build with Rollup (@decky/rollup plugin) → dist/
+pnpm typecheck        # TypeScript type check (tsc --noEmit)
 pnpm lint             # ESLint check
 pnpm lint:fix         # ESLint auto-fix
 pnpm format           # Prettier format src/**/*.{ts,tsx}
@@ -72,7 +73,7 @@ Uses Steam's internal browser via `Router.WindowStore?.GamepadUIMainWindowInstan
 - Vitest with happy-dom environment
 - `@decky/api` is aliased to `src/__mocks__/decky-api.ts` in vitest config
 - Additional mocks in `src/__mocks__/` for steam-browser and localStorage
-- Test files live alongside source as `*.test.{ts,tsx}` and in project root for lib utilities
+- Test files live alongside source as `*.test.{ts,tsx}` (e.g. `src/lib/geometry.test.ts` next to `src/lib/geometry.ts`)
 
 ### UI Library
 

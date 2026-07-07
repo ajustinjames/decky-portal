@@ -33,7 +33,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Deploying to Steam Deck
 
-1. Copy `deck.example.json` to `deck.json` (gitignored) and update `deckip` and `deckpass` to match your Deck.
+1. Copy `deck.example.json` to `deck.json` (gitignored) and update `deckip`, `deckport`, `deckuser`, and `deckdir` to match your Deck. Never put a password in this file — the deploy script prompts for the SSH password interactively.
 2. Enable SSH on your Deck (Desktop Mode > Konsole > `sudo systemctl enable --now sshd`).
 3. Build and deploy:
    ```bash
@@ -47,6 +47,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ```bash
 pnpm build            # Build the plugin
+pnpm typecheck        # TypeScript type check (tsc --noEmit)
 pnpm lint             # Check code style
 pnpm lint:fix         # Auto-fix linting issues
 pnpm format           # Format code with Prettier

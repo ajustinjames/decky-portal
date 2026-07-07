@@ -66,8 +66,7 @@ const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
 
   const [handles] = useState<{ browser: BrowserHandle; view: BrowserViewHandle } | null>(() => {
     const root = Router.WindowStore?.GamepadUIMainWindowInstance as
-      | (WindowRouter & MainWindowInstance)
-      | undefined;
+      (WindowRouter & MainWindowInstance) | undefined;
     if (!root) {
       return null;
     }
