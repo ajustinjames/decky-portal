@@ -4,14 +4,14 @@ import { ModalRootProps } from '@decky/ui';
 
 import { State, GlobalContext } from '../hooks/global-state';
 
-interface ModalContext extends ModalRootProps {
+type ModalContext<P> = P & {
   value: StateManager<State>;
-}
+};
 
-export const modalWithState = (Component: React.FC<ModalRootProps>) => {
-  return ({ value, ...props }: ModalContext) => (
+export const modalWithState = <P extends ModalRootProps>(Component: React.FC<P>) => {
+  return ({ value, ...props }: ModalContext<P>) => (
     <GlobalContext.Provider value={value}>
-      <Component {...props} />
+      <Component {...(props as unknown as P)} />
     </GlobalContext.Provider>
   );
 };

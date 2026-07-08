@@ -45,7 +45,6 @@ Give users a fast, touch-friendly way to save websites they visit often and laun
   - Twitch
   - Netflix
   - Crunchyroll
-  - Disney+
 - Users can delete or modify these freely.
 
 ---

@@ -10,6 +10,11 @@ permissions:
   contents: write
   pull-requests: read
 
+# Serialize releases so two PRs merged close together can't race to the same tag.
+concurrency:
+  group: release-from-pr
+  cancel-in-progress: false
+
 jobs:
   release:
     if: github.event.pull_request.merged == true
@@ -24,20 +29,25 @@ jobs:
             const pr = context.payload.pull_request;
             const labels = (pr.labels || []).map((label) => String(label.name).toLowerCase());
 
+            const isPrerelease = labels.includes('semver:prerelease');
+
             let bump = null;
             if (labels.includes('semver:major')) bump = 'major';
             else if (labels.includes('semver:minor')) bump = 'minor';
             else if (labels.includes('semver:patch')) bump = 'patch';
 
-            if (!bump) {
-              core.notice('No semver label found (semver:major|minor|patch). Skipping release.');
+            if (!bump && !isPrerelease) {
+              core.notice('No semver label found (semver:major|minor|patch|prerelease). Skipping release.');
               core.setOutput('created', 'false');
               return;
             }
 
+            // A prerelease of a feature defaults to previewing the next minor.
+            if (!bump) bump = 'minor';
+
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const { data: tags } = await github.rest.repos.listTags({ owner, repo, per_page: 100 });
+            const tags = await github.paginate(github.rest.repos.listTags, { owner, repo, per_page: 100 });
 
             const versions = tags
               .map((tag) => tag.name)
@@ -62,14 +72,31 @@ jobs:
               patch += 1;
             }
 
-            const tag = `v${major}.${minor}.${patch}`;
-            core.notice(`Will release ${tag} from merged PR #${pr.number}.`);
+            let tag = `v${major}.${minor}.${patch}`;
+
+            if (isPrerelease) {
+              // Number prereleases per target version: v1.2.0-pre.1, v1.2.0-pre.2, ...
+              // Stable version math above ignores -pre tags, so a prerelease
+              // never advances the stable version sequence.
+              const prePattern = new RegExp(`^v${major}\\.${minor}\\.${patch}-pre\\.(\\d+)$`);
+              const lastPre = tags
+                .map((t) => t.name.match(prePattern))
+                .filter(Boolean)
+                .reduce((max, match) => Math.max(max, Number(match[1])), 0);
+              tag = `${tag}-pre.${lastPre + 1}`;
+            }
+
+            core.notice(`Will release ${tag} (${isPrerelease ? 'prerelease' : 'stable'}) from merged PR #${pr.number}.`);
             core.setOutput('created', 'true');
             core.setOutput('tag', tag);
+            core.setOutput('prerelease', String(isPrerelease));
 
       - name: Checkout code
         if: steps.semver.outputs.created == 'true'
         uses: actions/checkout@v4
+        with:
+          # Tag the actual merge commit on main, not the PR's synthetic merge ref.
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Setup pnpm
         if: steps.semver.outputs.created == 'true'
@@ -97,7 +124,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.semver.outputs.tag }}
+          PRERELEASE: ${{ steps.semver.outputs.prerelease }}
         run: |
+          EXTRA_FLAGS=()
+          if [[ "${PRERELEASE}" == "true" ]]; then
+            EXTRA_FLAGS+=(--prerelease)
+          fi
           git tag "${TAG}"
           git push origin "${TAG}"
-          gh release create "${TAG}" out/*.zip --generate-notes --title "${TAG}"
+          gh release create "${TAG}" out/*.zip --generate-notes --title "${TAG}" "${EXTRA_FLAGS[@]}"

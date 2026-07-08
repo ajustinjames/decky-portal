@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { useGlobalState } from '../hooks/global-state';
 import { intersectRectangles } from '../lib/geometry';
+import { isSafeUrl } from '../lib/url';
 import { UIComposition, useUIComposition } from '../hooks/use-ui-composition';
 import { BAR_WIDTH, ControlBar } from './control-bar';
 import { MinimisedIndicator } from './minimised-indicator';
@@ -87,7 +88,11 @@ const Browser = ({ url, visible, x, y, width, height }: BrowserProps) => {
   }, [handles, visible]);
 
   useEffect(() => {
-    handles?.view.LoadURL(url);
+    // Last line of defence: state can be hydrated from localStorage, so never
+    // hand a non-http(s) URL to the BrowserView.
+    if (isSafeUrl(url)) {
+      handles?.view.LoadURL(url);
+    }
   }, [url, handles]);
 
   useEffect(() => {

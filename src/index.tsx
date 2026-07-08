@@ -8,6 +8,7 @@ import { Settings } from './components/settings';
 import { Position, ViewMode } from './lib/util';
 import { State, GlobalContext } from './hooks/global-state';
 import { getPersistedPortalState, PORTAL_STORAGE_KEY } from './lib/storage';
+import { seedIfNeeded } from './lib/default-bookmarks';
 
 export default definePlugin(() => {
   const defaultState: State = {
@@ -21,18 +22,34 @@ export default definePlugin(() => {
     controlBar: true,
     bookmarks: [],
     quickAccessIds: [],
+    bookmarksInitialised: false,
   };
 
   const state = new StateManager<State>({
     ...defaultState,
-    ...getPersistedPortalState(localStorage),
+    ...seedIfNeeded(getPersistedPortalState(localStorage)),
   });
 
-  state.watch(({ position, margin, size, url, bookmarks, quickAccessIds }) =>
-    localStorage.setItem(
-      PORTAL_STORAGE_KEY,
-      JSON.stringify({ position, margin, size, url, bookmarks, quickAccessIds }),
-    ),
+  state.watch(
+    ({ position, margin, size, url, bookmarks, quickAccessIds, bookmarksInitialised }) => {
+      try {
+        localStorage.setItem(
+          PORTAL_STORAGE_KEY,
+          JSON.stringify({
+            position,
+            margin,
+            size,
+            url,
+            bookmarks,
+            quickAccessIds,
+            bookmarksInitialised,
+          }),
+        );
+      } catch (error) {
+        // A quota failure must not take down every state transition.
+        console.error('portal: failed to persist state', error);
+      }
+    },
   );
 
   routerHook.addGlobalComponent('Portal', () => {

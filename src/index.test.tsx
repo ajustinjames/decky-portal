@@ -72,6 +72,7 @@ describe('plugin entrypoint', () => {
       url: 'https://example.com',
       bookmarks,
       quickAccessIds,
+      bookmarksInitialised: true,
     });
 
     expect(setItemSpy).toHaveBeenCalledWith(
@@ -83,6 +84,7 @@ describe('plugin entrypoint', () => {
         url: 'https://example.com',
         bookmarks,
         quickAccessIds,
+        bookmarksInitialised: true,
       }),
     );
   });

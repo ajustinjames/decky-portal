@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   createBookmark,
@@ -57,6 +57,23 @@ describe('bookmark helpers', () => {
   it('generateBookmarkId produces distinct values on successive calls', () => {
     const ids = new Set(Array.from({ length: 10 }, () => generateBookmarkId()));
     expect(ids.size).toBe(10);
+  });
+
+  it('generateBookmarkId falls back to getRandomValues when randomUUID is unavailable', () => {
+    const realCrypto = globalThis.crypto;
+    vi.stubGlobal('crypto', {
+      getRandomValues: realCrypto.getRandomValues.bind(realCrypto),
+    });
+
+    try {
+      const ids = new Set(Array.from({ length: 5 }, () => generateBookmarkId()));
+      expect(ids.size).toBe(5);
+      for (const id of ids) {
+        expect(id).toMatch(UUID_V4_REGEX);
+      }
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it('createBookmark returns a bookmark with the provided name and url', () => {

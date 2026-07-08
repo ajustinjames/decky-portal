@@ -30,7 +30,10 @@ export default [
                 setTimeout: 'readonly',
                 clearTimeout: 'readonly',
                 crypto: 'readonly',
+                console: 'readonly',
+                URL: 'readonly',
                 HTMLInputElement: 'readonly',
+                HTMLButtonElement: 'readonly',
             },
         },
         plugins: {
@@ -60,7 +63,9 @@ export default [
             '@typescript-eslint/no-explicit-any': 'warn',
             'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'warn',
-            'no-console': 'warn',
+            // console.log is noise, but deliberate error/warn reporting is the
+            // only telemetry available inside Steam's webview.
+            'no-console': ['warn', { allow: ['error', 'warn'] }],
         },
     },
     eslintConfigPrettier,
