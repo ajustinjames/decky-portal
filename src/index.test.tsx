@@ -51,8 +51,7 @@ describe('plugin entrypoint', () => {
     const setItemSpy = vi.spyOn(globalThis.Storage.prototype, 'setItem');
 
     const globalComponentFactory = vi.mocked(routerHook.addGlobalComponent).mock.calls[0][1] as
-      | (() => ReactElement)
-      | undefined;
+      (() => ReactElement) | undefined;
 
     expect(globalComponentFactory).toBeDefined();
 

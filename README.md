@@ -85,6 +85,7 @@ This file is gitignored and will not be committed.
 ```bash
 pnpm install          # install dependencies
 pnpm build            # build with Rollup
+pnpm typecheck        # TypeScript type check
 pnpm watch            # build in watch mode
 pnpm lint             # ESLint check
 pnpm format:check     # Prettier check

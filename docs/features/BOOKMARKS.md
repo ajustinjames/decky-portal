@@ -25,18 +25,18 @@ Give users a fast, touch-friendly way to save websites they visit often and laun
 
 ## Experience Outline
 
-### Adding a Bookmark
-- While a page is loaded, the user taps a "Save" or "★" action in the sidebar.
-- The bookmark is created with the current URL and page title (or a user-edited name).
-- A confirmation is shown briefly.
+### Quick Access (v1 model)
+- Up to **4 bookmarks** can be pinned ("starred") as quick-access slots.
+- Pinned bookmarks appear in the Quick Access sidebar; tapping one loads it immediately in the popup, opening or restoring the portal if needed.
+- Each entry shows a name/label and, when available, a favicon (cached icon → remote icon → generic glyph).
 
-### Browsing Bookmarks
-- The sidebar displays a scrollable list of saved bookmarks.
-- Each entry shows a name/label and, optionally, a favicon or site icon.
-- Tapping a bookmark loads it immediately in the popup.
+### Adding a Bookmark
+- Bookmarks are added through the **Manage Bookmarks** menu with a name (optional — defaults to the site name) and a URL.
+- Only `http(s)` URLs are accepted; bare hostnames like `youtube.com` are normalised automatically.
+- Saving the currently viewed page in one tap was deferred out of v1 (see Future Enhancements; original story: #18).
 
 ### Managing Bookmarks
-- Long-press or an "Edit" mode allows renaming, reordering, and deleting.
+- The Manage Bookmarks menu lists all bookmarks and supports renaming, reordering, deleting (with confirmation), and toggling quick-access pins.
 - Reordering is done via simple up/down actions — no drag-and-drop required on v1 (touchscreen drag on the Deck is unreliable in plugin UIs).
 
 ### Default Bookmarks
@@ -79,6 +79,7 @@ Give users a fast, touch-friendly way to save websites they visit often and laun
 
 ## Future Enhancements
 
+- **Save current page** — one-tap "★" action to bookmark the page being viewed (deferred from v1; original story: #18).
 - **Folders or categories** — allow grouping bookmarks (e.g., "Streaming", "Guides", "Social").
 - **Favicon fetch** — automatically retrieve and display the site's icon for visual recognition.
 - **Sync** — optional cloud backup/sync of bookmarks across devices (requires a backend; out of scope for v1).
