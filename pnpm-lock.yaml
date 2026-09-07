@@ -4,6 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  glob@>=10.2.0 <10.5.0: 10.5.0
+  brace-expansion@^1.1.7: 1.1.13
+  brace-expansion@^2.0.0: 2.0.3
+  vite@>=7.0.0 <7.3.5: 7.3.5
+  esbuild@<0.28.1: 0.28.1
+
 importers:
 
   .:
