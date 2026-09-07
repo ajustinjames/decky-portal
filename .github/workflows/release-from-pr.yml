@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Determine next semver tag
         id: semver
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const pr = context.payload.pull_request;
@@ -93,20 +93,20 @@ jobs:
 
       - name: Checkout code
         if: steps.semver.outputs.created == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Tag the actual merge commit on main, not the PR's synthetic merge ref.
           ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Setup pnpm
         if: steps.semver.outputs.created == 'true'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 9
 
       - name: Setup Node.js
         if: steps.semver.outputs.created == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
